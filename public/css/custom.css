@@ -1,0 +1,121 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:300italic,700italic,300,700);
+
+/*body {
+    font: 14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #777;
+    font-weight: 300;
+}*/
+.signature {
+    border: 0;
+    border-bottom: 1px solid #000;
+}
+
+.signpadleft {
+  padding-left: 50;
+}
+
+.hoverred:hover {
+  color: #D9534F;
+  cursor: pointer;
+}
+
+.hoverblue:hover {
+  color: #5BC0DE;
+  cursor: pointer;
+}
+
+.gi-15x{font-size: 1.5em;}
+.gi-2x{font-size: 2em;}
+.gi-3x{font-size: 3em;}
+.gi-4x{font-size: 4em;}
+.gi-5x{font-size: 5em;}
+
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+.clear {
+    clear: both;
+}
+
+.table th {
+  text-align: center;
+}
+
+.table td {
+  text-align: center;
+}
+
+.nobmargin {
+  margin-bottom:0px;;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #222;
+    margin: 0 0 20px;
+}
+
+p, ul, ol, table, pre, dl {
+    margin: 0 0 20px;
+}
+
+h1, h2, h3 {
+    line-height: 1.1;
+}
+
+h1 {
+    font-size: 28px;
+}
+
+h2 {
+    color: #393939;
+}
+
+h3 {
+    color: #393939;
+    font-size: 36px;
+    margin-top: 75px;
+}
+
+h3, h4, h5, h6 {
+    color: #494949;
+}
+
+.error-header{
+  background-color: #d2322d;
+}
+
+.error-header h2{
+  color: #ffffff;
+  text-align: center;
+}
+
+.white{
+  color: white;
+  float: left;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.st-sort-ascent:before{
+  content: '\25B2';
+}
+
+.st-sort-descent:before{
+  content: '\25BC';
+}
+
+.top-buffer{
+  margin-top: 10px;
+}
+
+.st-selected{
+  /*background: #005ec6;*/
+  background: #86a7e0;
+}
+
+.controls-fixed{
+  background-color:rgba(0, 0, 0, 0.1);
+  bottom:0;
+  padding:10px 15px;
+  position: fixed;
+  top:auto;
+}

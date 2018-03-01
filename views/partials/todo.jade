@@ -1,0 +1,16 @@
+h1 TODO
+
+.row
+  .col-lg-12
+    input(type='text', ng-model='todo.desc').form-control
+    a(href='#', role='button', ng-click='todo.addTodoList()').btn.btn-default.btn-md
+      span.glyphicon.glyphicon-plus-sign
+      |  ADD THINGS TO DO
+
+.row
+  .col-lg-12
+    ul.list-group
+      li(ng-repeat='items in todo.list').list-group-item
+        a(href='#', ng-if='items.status==0', ng-click='todo.setClosedTodo(items.id)') {{items.id}} - {{items.description}}
+        span(ng-if='items.status!=0')
+          strike {{items.id}} - {{items.description}}

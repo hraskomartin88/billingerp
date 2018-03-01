@@ -1,0 +1,22 @@
+h1 {{title}}
+h2 {{subtitle}}
+
+table(st-table='data').table
+  thead
+    th TrackingNumber
+    th AccountNumber
+    th LabelDate
+    th Reference1
+    th Reference2
+    th Customer
+    th Actions
+  tbody
+    tr(ng-repeat='row in data')
+      td {{row.trackingnumber}}
+      td {{row.accountnumber}}
+      td {{row.labeldate | date: 'dd-MM-yyyy' : 'UTC'}}
+      td {{row.reference1}}
+      td {{row.reference2}}
+      td {{row.name}}
+      td
+        button(type='button', ng-click='unsetSelected(row)').btn.btn-xs.btn-info Unidentify

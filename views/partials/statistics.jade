@@ -1,0 +1,111 @@
+h1 {{statistics.title}}
+
+//p {{statistics.stat.stats1}}
+
+.row.hidden-print
+  .col-lg-12
+    h4 Selection
+    .col-lg-3
+      select(ng-options='cust.id as cust.name for cust in statistics.stat.customers', ng-model='statistics.stat.cust', ng-disabled='statistics.stat.checkb').form-control
+        option(style='display:none', value='') Select...
+      .row
+        .col-lg-12
+          label.checkbox-inline
+            input(type='checkbox', ng-change='statistics.stat.getAllCust()', ng-model='statistics.stat.checkb')
+            |  Select ALL
+    .col-lg-7
+      .row
+        .col-lg-6
+          datepicker(ng-model='statistics.stat.fromdate', min-mode='day',datepicker-mode="'day'")
+        .col-lg-6
+          datepicker(ng-model='statistics.stat.todate', min-mode='day',datepicker-mode="'day'")
+    .col-lg-2.btn-toolbar
+      span.btn.btn-default(ng-disabled='statistics.stat.fromdate == null || statistics.stat.todate == null || !(statistics.stat.cust != null || statistics.stat.checkb)', ng-click='statistics.stat.getChartData()') Get Data
+.row.hidden-print
+  .col-lg-12
+    a(href='#', ng-click='statistics.stat.exportToExcel()', role='button', ng-disabled='statistics.stat.fromdate == null || statistics.stat.todate == null || !(statistics.stat.cust != null || statistics.stat.checkb)').btn.btn-default.btn-md
+      span.glyphicon.glyphicon-share
+      |  Export to EXCEL
+hr
+.row
+  .col-lg-12
+    .row(id='fullstatdiv')
+      h4
+        strong {{statistics.stat.selectedcustname}}
+      .col-lg-6
+        table.table.table-striped
+          thead
+            tr
+              th
+              th Shipment
+              th Zuschlag
+              th Total
+          tbody
+            tr
+              th EK
+              td {{statistics.stat.stats1.shipmentEK | currency}}
+              td {{statistics.stat.stats1.surchargeEK | currency}}
+              td {{statistics.stat.stats1.totalEK | currency}}
+            tr
+              th VK
+              td {{statistics.stat.stats1.shipmentVK | currency}}
+              td {{statistics.stat.stats1.surchargeVK | currency}}
+              td {{statistics.stat.stats1.totalVK | currency}}
+            tr
+              th Margin
+              td {{statistics.stat.stats1.shipmentMARGE | currency}}
+              td {{statistics.stat.stats1.surchargeMARGE | currency}}
+              td {{statistics.stat.stats1.totalMARGE | currency}}
+      .col-lg-6
+        table.table.table-striped
+          thead
+            tr
+              th
+              th Shipments
+              th Packages
+          tbody
+            tr
+              th Single
+              th {{statistics.stat.stats1.singleNR}}
+              th {{statistics.stat.stats1.singleNR}}
+            tr
+              th Multi
+              th {{statistics.stat.stats1.multiNR}}
+              th {{statistics.stat.stats1.multipackNR}}
+            tr
+              th Total
+              th {{statistics.stat.stats1.shipmentNR}}
+              th {{statistics.stat.stats1.packageNR}}
+    hr
+    .row
+      .col-lg-4
+      .col-lg-4
+        h4 Country distribution
+        .row
+          .col-lg-12
+            nvd3(options='statistics.stat.eunoneu_donutchartoptions',data='statistics.stat.eunoneu_donutchartdata', api='api2', config="{refreshDataOnly: true, deepWatchData: true}")
+      .col-lg-4
+    .row
+      .col-lg-12
+        h4 Detailed Country Distribution
+        .row
+          .col-lg-6
+            h5 EU
+            nvd3(options='statistics.stat.country_donutchartoptions', data='statistics.stat.eucountry_donutchartdata', api='api3', config="{refreshDataOnly: true, deepWatchData: true}")
+          .col-lg-6
+            h5 Non-EU
+            nvd3(options='statistics.stat.country_donutchartoptions', data='statistics.stat.noneucountry_donutchartdata', api='api4', config="{refreshDataOnly: true, deepWatchData: true}")
+    hr
+    .row
+      .col-lg-12
+        h4 Shipments ditribution
+        .row
+          .col-lg-12
+            nvd3(options='statistics.stat.vol_multibarchartoptions',data='statistics.stat.packagesVolChart', api='api0', config="{refreshDataOnly: true, deepWatchData: true}")
+    hr
+    .row
+      .col-lg-12
+        h4 Weight distribution
+        .row
+          .col-lg-12
+            nvd3(options='statistics.stat.weight_multibarchartoptions',data='statistics.stat.packagesWeightChart', api='api1', config="{refreshDataOnly: true, deepWatchData: true}")

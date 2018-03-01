@@ -1,0 +1,15 @@
+div(print-section)
+  div.modal-header.error-header
+    h2 Rechnungslegung wichtig Punkte
+      //span(aria-hidden='true').glyphicon.glyphicon-alert.white
+  div.modal-body
+    p Richtlinien {{modalOptions.customerName}}
+    ul(data-ng-repeat="texts in modalOptions.bodyText")
+      li {{texts.note}}
+    div.printOnly.pull-right
+      input(type="text").signature
+      br
+      p Unterschrift
+div.modal-footer.error-header
+  button(print-btn, data-ng-click='modalOptions.close()').btn.btn-primary
+    {{modalOptions.closeButtonText}}

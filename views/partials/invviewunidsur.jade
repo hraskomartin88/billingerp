@@ -1,0 +1,23 @@
+h1 {{unidsur.title}}
+h2 {{unidsur.subtitle}}
+
+form.form-inline
+  section(sticky-nav)
+    select(ng-options='cust.id as cust.name for cust in unidsur.customers', ng-model='cust').form-control
+      option(style='display:none', value='') Select...
+    button(type='button', ng-click='unidsur.getSelectedRows()', data-toggle='dropdown', aria-haspopup='true', ng-disabled='cust == undefined').btn.btn-default.dropdown-toggle Set Customer 
+      span.badge
+        {{unidsur.selectedcount}}
+
+table(st-table='unidsur.data').table
+  thead
+    th TrackingNumber
+    th LabelDate
+    th Surcharge
+  tbody
+    tr(st-select-row='row', st-select-mode='multiple', ng-repeat='row in unidsur.data')
+      td {{row.main_trackingnumber}}
+      td {{row.labeldate | date: 'dd-MM-yyyy' : 'UTC'}}
+      td {{row.surcharge}}
+
+p {{unidsur.data}}

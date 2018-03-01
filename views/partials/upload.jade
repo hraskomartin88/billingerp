@@ -1,0 +1,31 @@
+h1 {{title}}
+
+pre Date:
+  em {{form.dt}}
+
+div(flow-init='setQuery', flow-files-submitted='$flow.upload()').ng-scope
+  .row
+    .col-lg-2
+      select(ng-options='suppl.id as suppl.name for suppl in suppliers', ng-model='suppl').form-control
+        option(style='display:none', value='') Select...
+    .col-lg-3
+      datepicker(ng-model='form.dt', min-mode='month',datepicker-mode="'month'")
+      //datepicker(ng-model='form.dt')
+    .col-lg-7.btn-toolbar
+      span.btn.btn-default(flow-btn, ng-disabled='suppl == undefined', ng-click='setThis()') Upload File
+      //span.btn.btn-default(flow-btn, flow-directory) Upload Folder
+
+  .row
+    .col-lg-12
+      //div.well.btn-toolbar
+        a(ng-click='$flow.resume()').btn.btn-small.btn-success Resume all
+        a(ng-click='$flow.pause()').btn.btn-small.btn-danger Pause all
+        a(ng-click='$flow.cancel()').btn.btn-small.btn-info Cancel all
+      span.label.label-info.ng-binding Total Size: {{$flow.getSize()}}bytes
+      p
+  .row
+    .col-lg-12
+      div(ng-repeat='file in $flow.files').transfer-box.ng-scope.ng-binding
+        p {{file.name}} ({{file.size}}bytes)
+        div(ng-class='{active: file.isUploading()}').progress.progress-striped
+          div(role='progressbar', ng-style='{width: (file.progress()*100)+"%"}').progress-bar

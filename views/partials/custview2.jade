@@ -1,0 +1,106 @@
+h1 {{title}}
+
+p {{data[2]}}
+
+p {{account.suppliers}}
+
+.row
+  .col-lg-12
+    {{data[0]}}
+.row
+  .col-lg-12
+    form(name='custDataForm')
+      .row
+        h4 Customer Details
+        .row
+          .col-lg-1
+          .col-lg-4
+            label Name
+            input(type='text', placeholder='{{data[1][0].name}}', ng-model='data[1][0].name').form-control
+        .row
+          .col-lg-1
+          .col-lg-4
+            label Street
+            input(type='text', placeholder='{{data[1][0].street}}', ng-model='data[1][0].street').form-control
+        .row
+          .col-lg-1
+          .col-lg-1
+            label Country
+            input(type='text', placeholder='{{data[1][0].country}}', ng-model='data[1][0].country').form-control
+          .col-lg-1
+            label PLZ
+            input(type='text', placeholder='{{data[1][0].postalcode}}', ng-model='data[1][0].postalcode').form-control
+          .col-lg-2
+            label City
+            input(type='text', placeholder='{{data[1][0].city}}', ng-model='data[1][0].city').form-control
+      .row
+        h4 Billing Details
+        .row
+          .col-lg-1
+          .col-lg-2
+            label Debitore Number
+            input(type='text', placeholder='{{data[1][0].debitoren}}', ng-model='data[1][0].debitoren').form-control
+          .col-lg-2
+            label UstIdnr
+            input(type='text', placeholder='{{data[1][0].ustidnr}}', ng-model='data[1][0].ustidnr').form-control
+      .row
+        .row
+          .col-lg-1
+          .col-lg-4
+            button(type='button', ng-click='UpdateCustomer()').btn.btn-success.top-buffer.pull-right Save changes
+      .row
+        h4 Reference(s)
+        .row
+          .col-lg-1
+          .col-lg-2
+            table.table.table-striped
+              thead
+                tr
+                  th Reference
+                  th Actions
+              tbody
+                tr(ng-repeat='datas in data[0]')
+                  td {{datas.reference}}
+                  td.btn-toolbar
+                    //button(type='button', ng-click='Select(datas)').btn.btn-xs.btn-primary edit
+                    button(type='button', ng-click='RemoveReference(datas.id)').btn.btn-xs.btn-danger delete
+
+                //tr(ng-repeat='datas in data[0]')
+                  td {{datas.customerreference}}
+                  td.btn-toolbar
+                    button(type='button', ng-click='Select(datas)').btn.btn-xs.btn-primary edit
+                    button(type='button', ng-click='RemoveReference(datas.id)').btn.btn-xs.btn-danger delete
+        form(name='addrefForm')
+          .row
+            .col-lg-1
+            .col-lg-2
+              input(type='text', placeholder='', ng-model='reference.value', required).form-control
+            .col-lg-1
+              button(type='button', ng-disabled='addrefForm.$invalid',ng-click='AddNewReference(reference.value)').btn.btn-default.form-control Add
+      .row.top-buffer
+        h4 Account number(s)
+        .row
+          .col-lg-1
+          .col-lg-2
+            table.table.table-striped
+              thead
+                tr
+                  th Account
+                  th Supplier
+                  th Actions
+              tbody
+                tr(ng-repeat='datas2 in data[2]')
+                  td {{datas2.accountnumber}}
+                  td {{datas2.name}}
+                  td.btn-toolbar
+                    button(type='button', ng-click='RemoveAccount(datas2.id)').btn.btn-xs.btn-danger delete
+        form(name='addaccForm')
+          .row
+            .col-lg-1
+            .col-lg-2
+              input(type='text', placeholder='', ng-model='account.value', required).form-control
+            .col-lg-2
+              select(ng-options='suppl.id as suppl.name for suppl in account.suppliers', ng-model='account.suppl').form-control
+                option(style='display:none', value='') Select...
+            .col-lg-1
+              button(type='button', ng-disabled='addaccForm.$invalid || account.suppl == undefined', ng-click='account.AddNewAccount(account.value,account.suppl)').btn.btn-default.form-control Add

@@ -1,0 +1,64 @@
+h1 {{title}}
+
+.row
+  .col-lg-12
+    fieldset
+      legend Add New Customer
+      form(name='custForm')
+        .row
+          .col-lg-2
+            input(type='text', ng-model='name', placeholder='Name', required).form-control
+          .col-lg-2
+            input(type='text', ng-model='street', placeholder='Street', required).form-control
+          .col-lg-1
+            input(type='text', ng-model='country', placeholder='Country', required).form-control
+          .col-lg-1
+            input(type='text', ng-model='postalcode', placeholder='PLZ', required).form-control
+          .col-lg-2
+            input(type='text', ng-model='city', placeholder='City', required).form-control
+          .col-lg-2
+            input(type='text', ng-model='debitoren', placeholder='Debitore', required).form-control
+          .col-lg-2
+            input(type='text', ng-model='ustidnr', placeholder='UstIdnr', required).form-control
+        .row.top-buffer
+          .col-lg-12
+            button(type='button', ng-disabled='custForm.$invalid', ng-click='addCustomer()').btn.btn-sm.btn-success
+              i.glyphicon.glyphicon-plus
+              |  Add customer
+
+table(st-table='displayedCollection', st-safe-src='data').table.table-striped
+  thead
+    tr
+      th(st-sort='CustomerID') CustomerID
+      th(st-sort='customerName') CustomerName
+      th(st-sort='Street') Street
+      th(st-sort='Country') Country
+      th(st-sort='PostalCode') PostalCode
+      th(st-sort='City') City
+      th(st-sort='Debitore') Debitore
+      th(st-sort='UstIdnr') UstIdnr
+      th
+    tr
+      th(colspan='10')
+        input(st-search='', placeholder='global search..', type='text', class='input-sm form-control')
+  tbody
+    tr(ng-repeat='row in displayedCollection')
+      td {{row.id}}
+      td {{row.name}}
+      td {{row.street}}
+      td {{row.country}}
+      td {{row.postalcode}}
+      td {{row.city}}
+      td {{row.debitoren}}
+      td {{row.ustidnr}}
+      td
+        button(type='button', ng-click='removeCustomer(row)').btn.btn-sm.btn-danger
+          i.glyphicon.glyphicon-remove
+      td
+        a(href='/custreference/{{row.id}}')
+          button(type='button').btn.btn-sm.btn-primary
+            i.glyphicon.glyphicon-pencil
+      td
+        a(href='/custprice/{{row.id}}')
+          button(type='button').btn.btn-sm.btn-default
+            i.glyphicon.glyphicon-euro

@@ -1,0 +1,30 @@
+h1 {{billed.title}}
+
+.row
+  .col-lg-12
+    table.table.table-striped
+      thead
+        th UniqueID
+        th Customer
+        th Debitoren
+        th UstIDnr
+        th Net
+        th Date Billed
+        th PDF
+        th CSV
+      ttbody
+        tr(ng-repeat='datas in billed.maindata', ng-model='billed.maindata')
+          td {{datas.uid}}
+          td {{datas.name}}
+          td {{datas.debitoren}}
+          td {{datas.ustidnr}}
+          td {{datas.nettotal | currency:'€':2}}
+          td {{datas.billedon | date: 'dd-MM-yyyy HH:mm:ss' : 'UTC'}}
+          td
+            span(id='pdfdownload', ng-click='billed.pdfDownload(datas.uid)').glyphicon.glyphicon-save-file.hoverred.gi-15x
+          td
+            span(id='csvdownload', ng-click='billed.exportToCsv(datas.uid)').glyphicon.glyphicon-save-file.hoverblue.gi-15x
+
+
+//{{row.date | date: 'dd-MM-yyyy' : 'UTC'}}
+{{billed.maindata}}

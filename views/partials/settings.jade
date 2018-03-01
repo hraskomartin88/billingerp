@@ -1,0 +1,153 @@
+h1 {{settings.title}}
+
+.row
+  .col-lg-12
+    h4 Fuel Surcharge
+    form.form-inline
+      div.form-group
+      .row
+        .col-lg-3
+          datepicker(ng-model='settings.month', min-mode='month',datepicker-mode="'month'")
+        .col-lg-2
+          .row
+            .col-lg-12
+              label STANDARD
+              div.input-group
+                input(type='text',ng-model='settings.std', decprice).form-control
+                span.input-group-addon
+                  span %
+          .row
+            .col-lg-12
+              label EXPRESS
+              div.input-group
+                input(type='text',ng-model='settings.exp', decprice).form-control
+                span.input-group-addon
+                  span %
+          .row.top-buffer
+            .col-lg-12
+              button(ng-click='settings.addFuelSurcharge()', ng-disabled='settings.checkinputs()').btn.btn-default Add
+        .col-lg-4
+          table.table
+            thead
+              th Month
+              th Standard
+              th Express
+            tbody(ng-repeat='datefuel in settings.fuelhistory')
+              td {{datefuel.fueldate | date: 'dd/MM/yyyy'}}
+              td {{datefuel.std | number:2}} %
+              td {{datefuel.exp | number:2}} %
+    hr
+.row
+  .col-lg-12
+    h4 Maut Surcharge
+    form.form-inline
+      div.form-group
+      .row
+        .col-lg-2
+          .row
+            .col-lg-12
+              label AT
+              div.input-group
+                input(type='text', ng-model='settings.mautat', decprice).form-control
+                span.input-group-addon
+                  span €
+          .row
+            .col-lg-12
+              label AT+DE
+              div.input-group
+                input(type='text', ng-model='settings.mautatde', decprice).form-control
+                span.input-group-addon
+                  span €
+          .row.top-buffer
+            .col-lg-12
+              button(ng-click='settings.addMautSurcharge()', ng-disabled='settings.checkmautinputs()').btn.btn-default Add
+        .col-lg-4
+          table.table
+            thead
+              tr
+                th Added
+                th AT
+                th AT+DE
+            tbody(ng-repeat='datemaut in settings.currentmaut')
+              tr
+                td {{datemaut.dateofadd | date: 'dd/MM/yyyy HH:mm'}}
+                td {{datemaut.at | number:2}} €
+                td {{datemaut.atde | number:2}} €
+    hr
+.row
+  .col-lg-12
+    h4 Private delivery
+    form.form-inline
+      div.form-group
+      .row
+        .col-lg-2
+          .row
+            .col-lg-12
+              div.input-group
+                input(type='text', ng-model='settings.privatesurcharge', decprice).form-control
+                span.input-group-addon
+                  span €
+          .row.top-buffer
+            .col-lg-12
+              button(ng-click='settings.addPrivateSurchargeSettings()', ng-disabled='settings.checkprivateinput()').btn.btn-default Add
+        .col-lg-4
+          table.table
+            thead
+              tr
+                th Added
+                th Price (in Euro)
+            tbody(ng-repeat='dateprivate in settings.currentprivate')
+              tr
+                td {{dateprivate.dateofadd | date: 'dd/MM/yyyy HH:mm'}}
+                td {{dateprivate.priceprivate | number:2}} €
+    hr
+.row
+  .col-lg-12
+    h4 C.O.D.
+    form.form-inline
+      div.form-group
+      .row
+        .col-lg-2
+          .row
+            .col-lg-12
+              label AT
+              div.input-group
+                input(type='text', ng-model='settings.codat', decprice).form-control
+                span.input-group-addon
+                  span €
+          .row
+            .col-lg-12
+              label DE
+              div.input-group
+                input(type='text', ng-model='settings.codde', decprice).form-control
+                span.input-group-addon
+                  span €
+          .row
+            .col-lg-12
+              label INT
+              div.input-group
+                input(type='text', ng-model='settings.codint', decprice).form-control
+                span.input-group-addon
+                  span €
+          .row.top-buffer
+            .col-lg-12
+              button(ng-click='settings.addCodSurchargeSettings()',ng-disabled='settings.checkcodinput()').btn.btn-default Add
+        .col-lg-4
+          table.table
+            thead
+              tr
+                th Added
+                th AT
+                th DE
+                th INT.
+            tbody(ng-repeat='coddata in settings.currentcod')
+              tr
+                td {{coddata.dateofadd | date: 'dd/MM/yyyy HH:mm'}}
+                td {{coddata.at | number:2}} €
+                td {{coddata.de | number:2}} €
+                td {{coddata.internat | number:2}} €
+
+    hr
+.row.top-buffer
+  .col-lg-12
+    h4 VAT Matrix

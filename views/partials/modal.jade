@@ -1,0 +1,10 @@
+div.modal-header.error-header
+  h2 {{modalOptions.headerText}}
+    span(aria-hidden='true').glyphicon.glyphicon-alert.white
+div.modal-body
+  p {{modalOptions.bodyText}}
+div.modal-footer.error-header
+  button(type='button', data-ng-click='modalOptions.close()').btn
+    {{modalOptions.closeButtonText}}
+  button(data-ng-click='modalOptions.ok();').btn.btn-primary
+    {{modalOptions.actionButtonText}}

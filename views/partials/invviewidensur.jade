@@ -1,0 +1,26 @@
+h1 {{idensur.title}}
+h2 {{idensur.subtitle}}
+
+table(st-table='idensur.data').table
+  thead
+    th TrackingNumber
+    th AccountNumber
+    th LabelDate
+    th Reference1
+    th Reference2
+    th Customer
+    th Surcharge
+    th Actions
+  tbody
+    tr(ng-repeat='row in idensur.data')
+      td {{row.main_trackingnumber}}
+      td {{row.accountnumber}}
+      td {{row.labeldate | date: 'dd-MM-yyyy' : 'UTC'}}
+      td {{row.reference1}}
+      td {{row.reference2}}
+      td {{row.name}}
+      td {{row.surcharge}}
+      td
+        button(type='button', ng-click='idensur.unsetSelected(row)').btn.btn-xs.btn-info Unidentify
+
+p{{idensur.data}}

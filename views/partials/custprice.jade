@@ -1,0 +1,296 @@
+.row
+  .col-lg-6
+    h1
+      a(href='', ng-click='scrollTo("price")') Prices
+      | , 
+      a(href='', ng-click='scrollTo("zone")') Zones
+      |  and 
+      a(href='', ng-click='scrollTo("surcharge")') Surcharges
+      |  Setup
+
+.row
+  .col-lg-2
+    h4 SUPPLIERS
+    form
+      div(ng-repeat='item in price.suppliers').checkbox
+        label
+          input(id='item.main_supplier_alpha3', value='item.main_supplier_alpha3', ng-checked='price.supplselection.indexOf(item.main_supplier_alpha3) > -1', ng-click='price.suppltoggleSelection(item.main_supplier_alpha3)', type='checkbox', checkbox-group)
+          |  {{item.main_supplier_alpha3}}
+  .col-lg-4
+    h4 SERVICES
+    form
+      div(ng-repeat='item in price.maindata', ng-show='price.supplselection.indexOf(item.main_supplier_alpha3) != -1').checkbox
+        label
+          input(id='item.id', value='item.id', ng-checked='price.servselection.indexOf(item.id) > -1',ng-click='price.servtoggleSelection(item.id)', type='checkbox', checkbox-group)
+          |  ({{item.main_supplier_alpha3}}) {{item.service}}
+  .col-lg-2
+    form.form-horizontal
+      div.form-group
+        div.checkbox
+          label(for='multichkbox')
+            input(id='multichkbox', type='checkbox', checkbox-group, ng-click='price.servtoggleSelection(0)',ng-checked='price.servselection.indexOf(0) > -1')
+            | DHL/UPS Multi?!
+      div.form-group
+        label(for='numberofzones').control-label Number of Zones
+        input(type='number',min='1',max='30', id='numberofzones', ng-model='price.zonenr').form-control
+      div.form-group
+        button(type='button', ng-disabled='price.selectionbit == 0', ng-click='price.allSelected()').btn.btn-default Add
+.row
+  .col-lg-12
+    hr
+.row
+  .col-lg-12
+    legend(id='price')
+      h4 PRICES
+    .row(ng-repeat='item in price.custvktables track by $index').top-buffer
+      .col-lg-12
+        strong {{item | servicebitdisplay:item:price.maindata}} 
+        button(type='button', ng-click='price.deletePrice(item)').btn.btn-xs.btn-danger Delete
+        .row.top-buffer(flow-init='{query:{type:2}}', flow-files-submitted='$flow.upload()',flow-file-success='price.completePriceImport.controllerFn($flow,$file,$message,$index)')
+          .col-lg-4.btn-toolbar
+            a(href='#', role='button', ng-click='price.savePrice(item)').btn.btn-default.btn-md
+              span.glyphicon.glyphicon-save
+              | Save Price
+            a(href='#', role='button', ng-click='price.exportPrice(item)').btn.btn-default.btn-md
+              span.glyphicon.glyphicon-export
+              | Export Price
+            span.btn.btn-default.btn-md(flow-btn)
+              span.glyphicon.glyphicon-import
+              | Import Price
+          .col-lg-8.btn-toolbar.top-buffer
+            datepicker(ng-model='price.dt[item]', ng-init="price.getExpiration(item)", ng-change="price.setExpiration(item, price.dt[item])" ,min-mode='month',datepicker-mode="'month'")
+            div(role='alert',collapse='price.isCollapsedExpiration[item]').alert.alert-success
+              button(type='button', data-dismiss='alert', aria-label='Close').close
+                span(aria-hidden='true') &times;
+              | The expiration date was successfully saved!
+          .col-lg-12.btn-toolbar.top-buffer
+            p
+            a(href='#', role='button', ng-click='price.addPriceZone(item)').btn.btn-default.btn-sm
+              span.glyphicon.glyphicon-plus
+              |  Add Zone
+            a(href='#', role='button', ng-click='price.removePriceZone(item)').btn.btn-default.btn-sm
+              span.glyphicon.glyphicon-minus
+              |  Remove Last Zone
+        .row.top-buffer
+          .col-lg-12
+            table.table.table-striped
+              thead
+                tr
+                  th(ng-repeat='head in price.zheaders[$index]') {{head}}
+              tbody
+                tr(ng-repeat='prices in price.prices[$index]')
+                  td(ng-repeat='(key,valprice) in prices')
+                    input(type='text', ng-model='prices[key]',decprice)
+        .row
+          .col-lg-12.btn-toolbar
+            button(type='button', ng-click='price.addNewRow(item)').btn.btn-sm.btn-default
+              i.glyphicon.glyphicon-plus
+              |  Add New Row
+            button(type='button', ng-click='price.removeLastRow(item)').btn.btn-sm.btn-default
+              i.glyphicon.glyphicon-minus
+              |  Remove Last Row
+        hr
+.row
+  .col-lg-12
+    legend(id='surcharge')
+      h4 SURCHARGES
+    .row
+      .col-lg-12
+        strong TREIBSTOFF
+    .row
+      .col-lg-12.checkbox
+        label
+          input(type='checkbox', id='price.globpercentage', ng-model='price.globalchecked', ng-disabled='price.fixedchecked')
+          | Global %
+      .col-lg-12.checkbox
+        label
+          input(type='checkbox', id='price.fixedpercentage', ng-model='price.fixedchecked', ng-disabled='price.globalchecked')
+          | Fixed %
+    .row
+      form
+        .col-lg-4
+          .row
+            .col-lg-4
+              label STANDARD
+              div.input-group
+                input(type='text', id='price.stdpercentage', ng-disabled='price.globalchecked', ng-model='price.stdpercentage', decprice).form-control
+                span.input-group-addon
+                  span %
+            .col-lg-4
+              label EXPRESS
+              div.input-group
+                input(type='text', id='price.exppercentage', ng-disabled='price.globalchecked', ng-model='price.exppercentage', decprice).form-control
+                span.input-group-addon
+                  span %
+    .row.top-buffer
+      .col-lg-12.btn-toolbar
+        a(href='#', role='button', ng-click='price.saveFuelSurcharge()',ng-disabled='price.checkinputs()').btn.btn-default.btn-md
+          span.glyphicon.glyphicon-save
+          | Save
+    .row.top-buffer
+      .col-lg-12.btn-toolbar
+        div(role='alert',collapse='price.isCollapsedSurcharge').alert.alert-success
+          button(type='button', data-dismiss='alert', aria-label='Close').close
+            span(aria-hidden='true') &times;
+          | The price was successfully saved!
+    hr
+    .row
+      .col-lg-12
+        strong MAUT
+    .row
+      .col-lg-12.checkbox
+        label
+          input(type='checkbox', id='price.mautglobal', ng-model='price.mautglobalchecked', ng-disabled='price.mautfixedchecked')
+          | Global
+      .col-lg-12.checkbox
+        label
+          input(type='checkbox', id='price.mautfixed', ng-model='price.mautfixedchecked', ng-disabled='price.mautglobalchecked')
+          | Fixed
+    .row
+      form
+        .col-lg-4
+          .row
+            .col-lg-4
+              label AT
+              div.input-group
+                input(type='text', id='price.mautat', ng-disabled='price.mautglobalchecked', ng-model='price.mautat', decprice).form-control
+                span.input-group-addon
+                  span €
+            .col-lg-4
+              label AT+DE
+              div.input-group
+                input(type='text', id='price.mautatde', ng-disabled='price.mautglobalchecked', ng-model='price.mautatde', decprice).form-control
+                span.input-group-addon
+                  span €
+    .row.top-buffer
+      .col-lg-12.btn-toolbar
+        a(href='#', role='button', ng-click='price.addMautSurchargeCust()',ng-disabled='price.checkmautinputs()').btn.btn-default.btn-md
+          span.glyphicon.glyphicon-save
+          | Save
+    .row.top-buffer
+      .col-lg-12.btn-toolbar
+        div(role='alert',collapse='price.isCollapsedMautSurcharge').alert.alert-success
+          button(type='button', data-dismiss='alert', aria-label='Close').close
+            span(aria-hidden='true') &times;
+          | The price was successfully saved!
+    hr
+    .row
+      .col-lg-12
+        strong PRIVATE
+    .row
+      .col-lg-12.checkbox
+        label
+          input(type='checkbox', id='price.privateglobal', ng-model='price.privateglobalchecked', ng-disabled='price.privatefixedchecked')
+          | Global
+      .col-lg-12.checkbox
+        label
+          input(type='checkbox', id='price.privatefixed', ng-model='price.privatefixedchecked', ng-disabled='price.privateglobalchecked')
+          | Fixed
+    .row
+      form
+        .col-lg-4
+          .row
+            .col-lg-4
+              label PRICE
+              div.input-group
+                input(type='text', id='price.privateprice', ng-disabled='price.privateglobalchecked', ng-model='price.privateprice', decprice).form-control
+                span.input-group-addon
+                  span €
+    .row.top-buffer
+      .col-lg-12.btn-toolbar
+        a(href='#', role='button', ng-click='price.addPrivateSurchargeCust()', ng-disabled='price.checkprivateinput()').btn.btn-default.btn-md
+          span.glyphicon.glyphicon-save
+          | Save
+    .row.top-buffer
+      .col-lg-12.btn-toolbar
+        div(role='alert', collapse='price.isCollapsedPrivateSurcharge').alert.alert-success
+          button(type='button', data-dismiss='alert', aria-label='Close').close
+            span(aria-hidden='true') &times;
+          | The price was successfully saved!
+    hr
+    .row
+      .col-lg-12
+        strong COD
+    .row
+      .col-lg-12.checkbox
+        label
+          input(type='checkbox', id='price.codglobal', ng-model='price.codglobalchecked', ng-disabled='price.codfixedchecked')
+          | Global
+      .col-lg-12.checkbox
+        label
+          input(type='checkbox', id='price.codfixed', ng-model='price.codfixedchecked', ng-disabled='price.codglobalchecked')
+          | Fixed
+    .row
+      form
+        .col-lg-4
+          .row
+            .col-lg-4
+              label AT
+              div.input-group
+                input(type='text', id='price.codatprice', ng-disabled='price.codglobalchecked', ng-model='price.codatprice', decprice).form-control
+                span.input-group-addon
+                  span €
+          .row
+            .col-lg-4
+              label DE
+              div.input-group
+                input(type='text', id='price.coddeprice', ng-disabled='price.codglobalchecked', ng-model='price.coddeprice', decprice).form-control
+                span.input-group-addon
+                  span €
+          .row
+            .col-lg-4
+              label INT.
+              div.input-group
+                input(type='text', id='price.codintprice', ng-disabled='price.codglobalchecked', ng-model='price.codintprice', decprice).form-control
+                span.input-group-addon
+                  span €
+    .row.top-buffer
+      .col-lg-12.btn-toolbar
+        a(href='#', role='button', ng-click='price.addCodSurchargeCust()', ng-disabled='price.checkcodinput()').btn.btn-default.btn-md
+          span.glyphicon.glyphicon-save
+          | Save
+    .row.top-buffer
+      .col-lg-12.btn-toolbar
+        div(role='alert', collapse='price.isCollapsedCodSurcharge').alert.alert-success
+          button(type='button', data-dismiss='alert', aria-label='Close').close
+            span(aria-hidden='true') &times;
+          | The price was successfully saved!
+    hr
+.row
+  .col-lg-12
+    legend(id='zone')
+      h4 ZONES
+    .row(flow-init='{query:{type:1}}', flow-files-submitted='$flow.upload()', flow-file-success='price.zoneCompleteUpload.controllerFn($flow,$file,$message)')
+      .col-lg-12.btn-toolbar
+        a(href='#', role='button', ng-click='price.saveZone()').btn.btn-default.btn-md
+          span.glyphicon.glyphicon-save
+          |  Save Zones
+        a(href='#', role='button', ng-click='price.exportZone(price.zones)').btn.btn-default.btn-md
+          span.glyphicon.glyphicon-export
+          |  Export Zones
+        span.btn.btn-default.btn-md(flow-btn)
+          span.glyphicon.glyphicon-import
+          |  Import Zones
+    .row.top-buffer
+      .col-lg-12
+        table.table.table-striped
+          tr
+            input(placeholder='search..',type='text', class='input-sm form-control', ng-model='searchText')
+            th COUNTRY
+            // {{serv | servicebitdisplay:serv:price.maindata}}
+            th(ng-repeat='serv in price.custvktables') {{serv | servicebitdisplay:serv:price.maindata}}
+          tr(ng-repeat='(key,data) in price.zones | filter: searchText track by $index')
+            td.col-lg-2
+              span.label.label-default {{data.alpha2}} - {{data.german_formal}}
+            td(ng-repeat='serv in price.custvktables')
+              input(type='text', placeholder='{{data[serv]}}', ng-model='data[serv]')
+
+p {{price.zones}}
+p {{price.custvktables}}
+p {{price.prices}}
+p {{price.suppliers}}
+p {{price.maindata}}
+p {{price.supplselection}}
+p {{price.servselection}}
+p {{price.selectionbit}}
+p {{price.zonenr}}

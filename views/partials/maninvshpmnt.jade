@@ -1,0 +1,29 @@
+h1 {{maninvshpmnt.title}}
+
+.row
+    .col-lg-12
+        table(st-table='maninvshpmnt.data').table.table-striped
+            thead
+                th ID
+                th trackingnumber
+                th numberofpackts
+                th labeldate
+                th weight
+                th service
+                th customer
+                th ek
+                th vk
+                th action
+            tbody
+                tr(ng-repeat='row in maninvshpmnt.data')
+                    td {{row.id}}
+                    td {{row.trackingnumber}}
+                    td {{row.numberofpackets}}
+                    td {{row.labeldate}}
+                    td {{row.weight}}
+                    td {{row.nameservice}}
+                    td {{row.namecustomer}}
+                    td {{row.manually_ek}}
+                    td {{row.manually_vk}}
+                    td
+                        button(type='button', ng-click='maninvshpmnt.delManShpmnt(row.id)').btn.btn-xs.btn-danger DELETE

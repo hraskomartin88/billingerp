@@ -1,0 +1,191 @@
+h1 {{down.title}}
+
+{{down.hrefforxls}}
+.row
+  .col-lg-12
+    ul(role='tablist').nav.nav-pills
+      li(role='presentation', ng-repeat="(year,value) in down.invoiceuploaddate", ng-class="{'active':$last}")
+        a(aria-controls='{{year}}', role='tab', data-toggle='tab', ng-click='down.selectYearFn(year)') {{year}}
+    ul(role='tablist').nav.nav-tabs.top-buffer
+      li(role='presentation', ng-repeat='month in down.invoiceuploaddate[down.selectedyear]', ng-class="{'active':$first}")
+        a(ng-href="#"+"{{month}}", aria-controls='{{month}}', role='tab', data-toggle='tab',showtab, ng-click='down.selectedmonth = month',ng-init='down.selectedmonth = down.invoiceuploaddate[down.selectedyear][0]') {{month}}
+    div.tab-content
+      div(role='tabpanel', ng-repeat='month in down.invoiceuploaddate[down.selectedyear]',id='{{month}}', ng-class="{'active':$first}", ng-click='down.selectedmonth = month',ng-init='down.selectedmonth = down.invoiceuploaddate[down.selectedyear][0]').tab-pane
+
+    form.form-inline.top-buffer
+      select(ng-options='cust.id as cust.name for cust in down.customers | filter:down.filterCustById()', ng-model='cust', ng-change='down.getExpiration(cust)').form-control
+        option(style='display:none', value='') Select...
+      button(type='button', ng-click='down.getCustomerInvoice(cust)', data-toggle='dropdown', aria-haspopup='true', ng-disabled='cust == undefined').btn.btn-default.dropdown-toggle Get Invoice Data
+    .row.top-buffer
+      .col-lg-12
+        .row(ng-repeat='item in down.expexpiredlist track by $index')
+          div.alert.alert-danger(role='alert')
+            strong 
+              | {{item.epoch_time | date: 'dd.MM.yyyy'}} 
+            | {{item.table_name | servicebitdisplay:item.table_name:down.expservlist}} 
+    .row.top-buffer
+      .col-lg-2
+        ul.list-group
+          li.list-group-item Total VK: {{down.totalvk | currency:'€':2}}
+          li.list-group-item Total HT: {{down.totalht | currency:'€':2}}
+          li.list-group-item Total EK: {{down.totalek | currency:'€':2}}
+          li.list-group-item Profit: {{(down.totalvk+down.totalht)-down.totalek | currency:'€':2}}
+    .row.top-buffer
+      .col-lg-2
+        a(href='#', ng-click='exportToExcel()', role='button', ng-disabled='down.disableexcel').btn.btn-default.btn-md
+          span.glyphicon.glyphicon-share
+          |  Export to EXCEL
+      .col-lg-2.hide
+        a(href='#', ng-click='down.exportToCsv(cust)', role='button', ng-disabled='down.disableexcel').btn.btn-default.btn-md
+          span.glyphicon.glyphicon-open-file
+          |  Export to CSV
+      .col-lg-2
+        a(href='#', ng-click='down.markAsBilled(cust)', role='button', ng-disabled='down.disableexcel').btn.btn-danger.btn-md
+          span.glyphicon.glyphicon-folder-close
+          |  Mark as Invoiced {{down.nextuid}}
+    .row.top-buffer
+      .col-lg-12
+        .row(id='fullinvoicedata')
+          table.table.table-striped(ng-if="down.selcustshipmentseu.length!=0")
+            thead.hide
+              tr
+                th(ng-style="{'background-color':'red'}").hide INTERNAL USE ONLY
+                th(ng-style="{'background-color':'red'}").hide
+                th(ng-style="{'background-color':'red'}").hide INTERNAL USE ONLY
+                th(ng-style="{'background-color':'red'}").hide
+                th(ng-style="{'background-color':'red'}").hide INTERNAL USE ONLY
+                th(ng-style="{'background-color':'red'}").hide
+                th(ng-style="{'background-color':'red'}").hide INTERNAL USE ONLY
+                th(ng-style="{'background-color':'red'}").hide
+                th(ng-style="{'background-color':'red'}").hide INTERNAL USE ONLY
+                th(ng-style="{'background-color':'red'}").hide
+                th(ng-style="{'background-color':'red'}").hide INTERNAL USE ONLY
+                th(ng-style="{'background-color':'red'}").hide
+                th(ng-style="{'background-color':'red'}").hide INTERNAL USE ONLY
+                th(ng-style="{'background-color':'red'}").hide
+                th(ng-style="{'background-color':'red'}").hide INTERNAL USE ONLY
+            thead
+              tr
+                th Datum
+                th Referenz
+                th Sendungsnummer
+                th Supplier
+                th Anzahl
+                th Versandart
+                th Land
+                th Gewicht
+                th Netto
+                th MWST
+                th Brutto
+                th VK
+                th EK
+                th HT
+                th USt.
+                th(ng-style="{'background-color':'red'}").hide INTERNAL USE ONLY
+            tbody
+              tr(ng-repeat='shipmentrow in down.selcustshipmentseu', ng-class='{danger: shipmentrow.netek>shipmentrow.netvk && shipmentrow.netvk!=0, warning:shipmentrow.netht!="", danger:shipmentrow.netvk==0 && shipmentrow.netht==0}',ng-style="{{down.getStyle(shipmentrow.netek,shipmentrow.netvk,shipmentrow.netht)}}",ng-init='down.totalvk=down.totalvk+shipmentrow.netvk;down.totalek=down.totalek+shipmentrow.netek;down.totalht=down.totalht+shipmentrow.netht;down.totalneteu=down.totalneteu+shipmentrow.netvk+shipmentrow.netht')
+                td {{shipmentrow.labeldate | date: 'dd.MM.yyyy'}}
+                td {{shipmentrow.reference1}}  {{shipmentrow.reference2}}
+                td "{{shipmentrow.trackingnumber}}"
+                td {{shipmentrow.main_supplier_id}}
+                td {{shipmentrow.numberofpackets}}
+                td {{shipmentrow.tempservice}}
+                td {{shipmentrow.receiver_country}}
+                td(ng-if="shipmentrow.weight_billed!==''") {{shipmentrow.weight_billed | number:2}}
+                td(ng-if="shipmentrow.weight_billed==''")
+                td(ng-if="shipmentrow.netvk!='0'") {{shipmentrow.netvk | number:2}}
+                  //div(click-to-edit="shipmentrow.netvk")
+                td(ng-if="shipmentrow.netvk==''") {{shipmentrow.netht | number:2}}
+                  //div(click-to-edit="shipmentrow.netht")
+                td(ng-if="shipmentrow.netvk!='0'") {{shipmentrow.netvk*shipmentrow.percentage | number:2}}
+                td(ng-if="shipmentrow.netvk==''") {{shipmentrow.netht*shipmentrow.percentage | number:2}}
+                td(ng-if="shipmentrow.netvk!='0'", ng-init='down.totalmwsteu=down.totalmwsteu+shipmentrow.netvk*shipmentrow.percentage') {{shipmentrow.netvk+shipmentrow.netvk*shipmentrow.percentage | number:2}}
+                td(ng-if="shipmentrow.netvk==''", ng-init='down.totalmwsteu=down.totalmwsteu+shipmentrow.netht*shipmentrow.percentage') {{shipmentrow.netht+shipmentrow.netht*shipmentrow.percentage | number:2}}
+                td {{shipmentrow.netvk | number:2}}
+                td {{shipmentrow.netek | number:2}}
+                td {{shipmentrow.netht | number:2}}
+                td {{shipmentrow.main_vat_code}}
+                td(ng-style="{'background-color':'red'}").hide INTERNAL USE ONLY
+              tr
+                td
+                td
+                td
+                td
+                td
+                td
+                td
+                  strong SUM
+                td
+                  strong {{down.totalneteu | number:2}}
+                td
+                  strong {{down.totalmwsteu | number:2}}
+                td
+                  strong {{down.totalneteu+down.totalmwsteu | number:2}}
+                td
+                td
+                td
+                td
+                td.hide
+    .row.top-buffer
+      .col-lg-12
+        .row(id='fullmaninvoicedata')
+          table.table.table-striped(ng-if="down.selcustshipmentman.length!=0")
+            thead
+              tr
+                th Datum
+                th Referenz
+                th Sendungsnummer
+                th Supplier
+                th Anzahl
+                th Versandart
+                th Absender
+                th Gewicht
+                th Netto
+                th MWST
+                th Brutto
+                th VK
+                th EK
+                th HT
+                th Ust.
+                th Empfänger
+            tbody
+              tr(ng-repeat='manrow in down.selcustshipmentman', ng-class='{danger:manrow.manually_ek>manrow.manually_vk && manrow.manually_vk!=0}', ng-init='down.totalmannet=down.totalmannet+manrow.manually_vk')
+                td {{manrow.labeldate | date: 'dd.MM.yyyy'}}
+                td {{manrow.reference1}}
+                td {{manrow.trackingnumber}}
+                td {{manrow.supplier}}
+                td {{manrow.numberofpackets}}
+                td {{manrow.service}}
+                td {{manrow.shippername}} {{manrow.shipper_country}}
+                td {{manrow.weight | number:2}}
+                td {{manrow.manually_vk | number:2}}
+                td {{manrow.manually_vk*manrow.percentage | number:2}}
+                td(ng-init='down.totalmanmwst=down.totalmanmwst+manrow.manually_vk*manrow.percentage') {{manrow.manually_vk+manrow.manually_vk*manrow.percentage | number:2}}
+                td {{manrow.manually_vk | number:2}}
+                td {{manrow.manually_ek | number:2}}
+                td {{0 | number:2}}
+                td {{manrow.code}}
+                td {{manrow.receivername}} {{manrow.receiver_country}}
+              tr
+                td
+                td
+                td
+                td
+                td
+                td
+                td
+                td
+                  strong SUM
+                td
+                  strong {{down.totalmannet | number:2}}
+                td
+                  strong {{down.totalmanmwst | number:2}}
+                td
+                  strong {{down.totalmannet+down.totalmanmwst | number:2}}
+                td
+                td
+                td
+                td
+                td
+
+//{{down.selcustshipmentman | json}}
