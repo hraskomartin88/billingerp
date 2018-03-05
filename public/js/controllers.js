@@ -1011,7 +1011,7 @@ angular.module('billingErp.controllers', ['smart-table','billingErp.services']).
             $scope.down.customers = data2.result;
 
             $scope.down.invoiceuploaddate = data;
-            console.log(data);
+            //console.log(data);
             $scope.down.getEUCountryList();
             $scope.down.getNextUid();
           });
@@ -1038,7 +1038,6 @@ angular.module('billingErp.controllers', ['smart-table','billingErp.services']).
         //console.log('var changed');
         $http.post('/api/getcustomerclsinv', {selyear:$scope.down.selectedyear,selmonth:$scope.down.selectedmonth})
         .success(function(response,status,fn,xhr){
-          //console.log(response);
           $scope.down.custclsinv = response;
         });
       }
