@@ -1635,6 +1635,9 @@ exports.getInvoices = function(callback){
 
 exports.getInvoiceUploadDate =function(callback){
   pool.getConnection(function(err,connection){
+    if(err){
+      console.log(err);
+    }
     var query = "SELECT YEAR(DATETARGET) as invyear,MONTHNAME(DATETARGET) as invmonth FROM main_invoice group by YEAR(datetarget),MONTH(datetarget) DESC;";
     //var query = "SELECT YEAR(DATETARGET) as invyear,MONTHNAME(DATETARGET) as invmonth FROM main_invoice WHERE YEAR(DATETARGET) = YEAR(CURDATE()) group by YEAR(datetarget),MONTH(datetarget) DESC LIMIT 0,3;";
     connection.query(query,function(err,result){
