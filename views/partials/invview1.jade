@@ -7,7 +7,7 @@ h1 {{title}}
         a(aria-controls='{{year}}', role='tab', data-toggle='tab', ng-click='selectedYear(year)') {{year}}
     ul(role='tablist').nav.nav-tabs.top-buffer
       li(role='presentation', ng-repeat='month in dateinfo[yearsel]', ng-class="{'active':$first}")
-        a(ng-href="#"+"{{month}}", aria-controls='{{month}}', role='tab', data-toggle='tab',showtab) {{month}}
+        a(ng-href="#"+"{{month}}", aria-controls='{{month}}', role='tab', data-toggle='tab',showtab) {{returnMonth(month)}}
     div.tab-content
       div(role='tabpanel', ng-repeat='month in dateinfo[yearsel]',id='{{month}}', ng-class="{'active':$first}").tab-pane
         .row
@@ -15,13 +15,13 @@ h1 {{title}}
             table(st-table='data').table.table-striped
               thead
                 th id
-                th InvoiceNo
+                th Rechnungsnr.
                 th Status
-                th Supplier
-                th Date
-                th(colspan='2') Shipments
-                th(colspan='2') Surcharges
-                th Actions
+                th Lieferant
+                th Datum
+                th(colspan='2') Sendungen
+                th(colspan='2') Zuschläge
+                th Aktionen
               tbody
                 tr(ng-repeat='row in data', ng-if='row.upyear==yearsel && row.upmonth==month')
                   td {{row.id}}
@@ -30,35 +30,35 @@ h1 {{title}}
                   td {{row.name}}
                   td {{row.date | date: 'dd-MM-yyyy' : 'UTC'}}
                   td(ng-repeat='inv in counts2', ng-if='inv.main_invoice_id==row.id')
-                    a(href='/invoices/iden/{{inv.main_invoice_id}}', role='button', data-ng-disabled="inv.count=='0' || row.status=='1' || close.disabledbtn").btn.btn-xs.btn-primary Identified 
+                    a(href='/invoices/iden/{{inv.main_invoice_id}}', role='button', data-ng-disabled="inv.count=='0' || row.status=='1' || close.disabledbtn").btn.btn-xs.btn-primary Identifiziert 
                       span.badge {{inv.count}}
                   td(ng-repeat='inv in counts', ng-if='inv.main_invoice_id==row.id')
-                    a(href='/invoices/unid/{{inv.main_invoice_id}}', role='button', data-ng-disabled="inv.count=='0' || row.status=='1' || close.disabledbtn").btn.btn-xs.btn-danger Unidentified 
+                    a(href='/invoices/unid/{{inv.main_invoice_id}}', role='button', data-ng-disabled="inv.count=='0' || row.status=='1' || close.disabledbtn").btn.btn-xs.btn-danger Unbekannt 
                       span.badge {{inv.count}}
                   td(ng-repeat='inv in counts4', ng-if='inv.main_invoice_id==row.id')
                     div(ng-if='inv.main_invoice_id==row.id')
-                      a(href='/invoices/idensur/{{inv.main_invoice_id}}', role='button', data-ng-disabled="inv.count=='0' || row.status=='1' || close.disabledbtn").btn.btn-xs.btn-primary Identified 
+                      a(href='/invoices/idensur/{{inv.main_invoice_id}}', role='button', data-ng-disabled="inv.count=='0' || row.status=='1' || close.disabledbtn").btn.btn-xs.btn-primary Identifiziert 
                         span.badge {{inv.count}}
                   td(ng-repeat='inv in counts3', ng-if='inv.main_invoice_id==row.id')
                     div(ng-if='inv.main_invoice_id==row.id')
-                      a(href='/invoices/unidsur/{{inv.main_invoice_id}}', role='button', data-ng-disabled="inv.count=='0' || row.status=='1' || close.disabledbtn").btn.btn-xs.btn-danger Unidentified 
+                      a(href='/invoices/unidsur/{{inv.main_invoice_id}}', role='button', data-ng-disabled="inv.count=='0' || row.status=='1' || close.disabledbtn").btn.btn-xs.btn-danger Unbekannt 
                         span.badge {{inv.count}}
                   td.btn-toolbar
-                    button(type='button', ng-click='findCustomers(row.id)', ng-disabled="row.status=='1' || close.disabledbtn").btn.btn-xs.btn-success Find Customers
-                    button(type='button', ng-click='closeInvoice(row.id)', ng-disabled="closeBoolInv(row.id) || row.status=='1' || close.disabledbtn").btn.btn-xs.btn-warning Close
-                    button(type='button', ng-click='deleteInvoice(row.invoiceno,row.id)', ng-disabled="row.status=='1' || close.disabledbtn").btn.btn-xs.btn-danger Delete
+                    button(type='button', ng-click='findCustomers(row.id)', ng-disabled="row.status=='1' || close.disabledbtn").btn.btn-xs.btn-success Kundensuche
+                    button(type='button', ng-click='closeInvoice(row.id)', ng-disabled="closeBoolInv(row.id) || row.status=='1' || close.disabledbtn").btn.btn-xs.btn-warning Schließen
+                    button(type='button', ng-click='deleteInvoice(row.invoiceno,row.id)', ng-disabled="row.status=='1' || close.disabledbtn").btn.btn-xs.btn-danger Löschen
             hr
-            h4 Manually added
+            h4 Manuell hinzugefügt
             table(st-table='manuallydata').table.table-striped
               thead
                 th id
-                th InvoiceNo
+                th Rechnungsnr.
                 th Status
-                th Supplier
-                th Date
-                th Shipments
-                th Surcharges
-                th Action
+                th Lieferant
+                th Datum
+                th Sendungen
+                th Zuschläge
+                th Aktionen
               tbody
                 tr(ng-repeat='row2 in mandata', ng-if='row2.yeartouse==yearsel && row2.monthtouse==month')
                   td {{row2.id}}
@@ -73,5 +73,5 @@ h1 {{title}}
                     a(href='/maninvoices/surcharges/{{row2.id}}', role='button', data-ng-disabled="row2.status=='1' || close.disabledbtn").btn.btn-xs.btn-primary
                       span.badge(ng-repeat='rowcount2 in mandatacount', ng-if='rowcount2.main_invoice_nr == row2.invoiceno') {{rowcount2.surchargescount}}
                   td.btn-toolbar
-                    button(type='button', ng-click='closeManuallyInvoice(row2.id)', ng-disabled="row2.status=='1' || close.disabledbtn").btn.btn-xs.btn-warning Close
-                    button(type='button', ng-click='deleteManuallyInvoice(row2.invoiceno,row2.id)', ng-disabled="row2.status=='1' || close.disabledbtn").btn.btn-xs.btn-danger Delete
+                    button(type='button', ng-click='closeManuallyInvoice(row2.id)', ng-disabled="row2.status=='1' || close.disabledbtn").btn.btn-xs.btn-warning Schließen
+                    button(type='button', ng-click='deleteManuallyInvoice(row2.invoiceno,row2.id)', ng-disabled="row2.status=='1' || close.disabledbtn").btn.btn-xs.btn-danger Löschen

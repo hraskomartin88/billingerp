@@ -583,7 +583,7 @@ module.exports = function(app){
                 }
             ], function(err){
               res.json({
-                title: 'Invoices',
+                title: 'Rechnungen',
                 result0:result[0],
                 result1:result[1],
                 result2:result[2],

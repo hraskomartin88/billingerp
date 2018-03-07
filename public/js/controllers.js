@@ -28,6 +28,47 @@ angular.module('billingErp.controllers', ['smart-table','billingErp.services']).
       });
     };
 
+    $scope.returnMonth = function returnMonth(monthname){
+      switch(monthname){
+        case "January":
+          return "Januar"
+          break;
+        case "February":
+          return "Februar";
+          break;
+        case "March":
+          return "März"
+          break;
+        case "April":
+          return "April"
+          break;
+        case "May":
+          return "Mai"
+          break;
+        case "June":
+          return "Juni"
+          break;
+        case "July":
+          return "Juli"
+          break;
+        case "August":
+          return "August"
+          break;
+        case "September":
+          return "September"
+          break;
+        case "October":
+          return "Oktober"
+          break;
+        case "November":
+          return "November"
+          break;
+        case "December":
+          return "Dezember"
+          break;
+      }
+    }
+
 
 
     /*var y= new Date();
