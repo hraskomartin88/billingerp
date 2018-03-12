@@ -977,7 +977,7 @@ angular.module('billingErp.controllers', ['smart-table','billingErp.services']).
   }).
   controller('BilledCtrl', function ($scope,$http,$filter){
     $scope.billed = {};
-    $scope.billed.title = 'Billed Invoices';
+    $scope.billed.title = 'Fakturierte Rechnungen';
 
     $http({
       method: 'GET',
@@ -1021,7 +1021,7 @@ angular.module('billingErp.controllers', ['smart-table','billingErp.services']).
   }).
   controller('DownloadCtrl',function (Excel, $timeout, $scope, $http, $filter, $route, modalService){
     $scope.down= {};
-    $scope.down.title = 'Download';
+    $scope.down.title = 'Herunterladen';
     $scope.down.totalvk=0;
     $scope.down.totalek=0;
     $scope.down.totalht=0;
@@ -1166,6 +1166,47 @@ angular.module('billingErp.controllers', ['smart-table','billingErp.services']).
       }
     };
 
+    $scope.down.returnMonth = function returnMonth(monthname){
+      switch(monthname){
+        case "January":
+          return "Januar"
+          break;
+        case "February":
+          return "Februar";
+          break;
+        case "March":
+          return "März"
+          break;
+        case "April":
+          return "April"
+          break;
+        case "May":
+          return "Mai"
+          break;
+        case "June":
+          return "Juni"
+          break;
+        case "July":
+          return "Juli"
+          break;
+        case "August":
+          return "August"
+          break;
+        case "September":
+          return "September"
+          break;
+        case "October":
+          return "Oktober"
+          break;
+        case "November":
+          return "November"
+          break;
+        case "December":
+          return "Dezember"
+          break;
+      }
+    }
+
     $scope.down.exportToCsv = function exportToCsv(cust){
       console.log(cust);
       //console.log('EXPORT TO EXCEL');
@@ -1275,7 +1316,7 @@ angular.module('billingErp.controllers', ['smart-table','billingErp.services']).
   }).
   controller('SettingsCtrl', function ($scope,$http){
     $scope.settings = {};
-    $scope.settings.title = 'Settings';
+    $scope.settings.title = 'Einstellungen';
     var x= new Date();
     x.setDate(1);
     x.setMonth(x.getMonth());
@@ -1380,7 +1421,7 @@ angular.module('billingErp.controllers', ['smart-table','billingErp.services']).
   }).
   controller('ManuallyCtrl', function ($scope,$http){
     $scope.manually = {};
-    $scope.manually.title = 'Add manually';
+    $scope.manually.title = 'Manuell hinzufügen';
 
     $scope.manually.mandata = {};
     $scope.manually.mandata.dateof = new Date;

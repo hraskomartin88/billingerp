@@ -9,13 +9,13 @@ h1 {{title}}
           .col-lg-2
             input(type='text', ng-model='name', placeholder='Name', required).form-control
           .col-lg-2
-            input(type='text', ng-model='street', placeholder='Street', required).form-control
+            input(type='text', ng-model='street', placeholder='Straße', required).form-control
           .col-lg-1
-            input(type='text', ng-model='country', placeholder='Country', required).form-control
+            input(type='text', ng-model='country', placeholder='Land', required).form-control
           .col-lg-1
-            input(type='text', ng-model='postalcode', placeholder='PLZ', required).form-control
+            input(type='text', ng-model='postalcode', placeholder='Postleitzahl', required).form-control
           .col-lg-2
-            input(type='text', ng-model='city', placeholder='City', required).form-control
+            input(type='text', ng-model='city', placeholder='Stadt', required).form-control
           .col-lg-2
             input(type='text', ng-model='debitoren', placeholder='Debitore', required).form-control
           .col-lg-2
@@ -24,17 +24,17 @@ h1 {{title}}
           .col-lg-12
             button(type='button', ng-disabled='custForm.$invalid', ng-click='addCustomer()').btn.btn-sm.btn-success
               i.glyphicon.glyphicon-plus
-              |  Add customer
+              |  Kunden hinzufügen
 
 table(st-table='displayedCollection', st-safe-src='data').table.table-striped
   thead
     tr
-      th(st-sort='CustomerID') CustomerID
-      th(st-sort='customerName') CustomerName
-      th(st-sort='Street') Street
-      th(st-sort='Country') Country
-      th(st-sort='PostalCode') PostalCode
-      th(st-sort='City') City
+      th(st-sort='CustomerID') KundenID
+      th(st-sort='customerName') Kundenname
+      th(st-sort='Street') Straße
+      th(st-sort='Country') Land
+      th(st-sort='PostalCode') Postleitzahl
+      th(st-sort='City') Ort
       th(st-sort='Debitore') Debitore
       th(st-sort='UstIdnr') UstIdnr
       th

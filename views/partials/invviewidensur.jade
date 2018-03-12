@@ -3,14 +3,14 @@ h2 {{idensur.subtitle}}
 
 table(st-table='idensur.data').table
   thead
-    th TrackingNumber
-    th AccountNumber
-    th LabelDate
-    th Reference1
-    th Reference2
-    th Customer
-    th Surcharge
-    th Actions
+    th Trackingnummer
+    th Kontonummer
+    th Etikett Datum
+    th Referenz1
+    th Referenz2
+    th Kunde
+    th Zuschlag
+    th Aktionen
   tbody
     tr(ng-repeat='row in idensur.data')
       td {{row.main_trackingnumber}}
@@ -21,6 +21,6 @@ table(st-table='idensur.data').table
       td {{row.name}}
       td {{row.surcharge}}
       td
-        button(type='button', ng-click='idensur.unsetSelected(row)').btn.btn-xs.btn-info Unidentify
+        button(type='button', ng-click='idensur.unsetSelected(row)').btn.btn-xs.btn-info Unidentifikation
 
 p{{idensur.data}}

@@ -8,14 +8,14 @@ h1 {{down.title}}
         a(aria-controls='{{year}}', role='tab', data-toggle='tab', ng-click='down.selectYearFn(year)') {{year}}
     ul(role='tablist').nav.nav-tabs.top-buffer
       li(role='presentation', ng-repeat='month in down.invoiceuploaddate[down.selectedyear]', ng-class="{'active':$first}")
-        a(ng-href="#"+"{{month}}", aria-controls='{{month}}', role='tab', data-toggle='tab',showtab, ng-click='down.selectedmonth = month',ng-init='down.selectedmonth = down.invoiceuploaddate[down.selectedyear][0]') {{month}}
+        a(ng-href="#"+"{{month}}", aria-controls='{{month}}', role='tab', data-toggle='tab',showtab, ng-click='down.selectedmonth = month',ng-init='down.selectedmonth = down.invoiceuploaddate[down.selectedyear][0]') {{down.returnMonth(month)}}
     div.tab-content
       div(role='tabpanel', ng-repeat='month in down.invoiceuploaddate[down.selectedyear]',id='{{month}}', ng-class="{'active':$first}", ng-click='down.selectedmonth = month',ng-init='down.selectedmonth = down.invoiceuploaddate[down.selectedyear][0]').tab-pane
 
     form.form-inline.top-buffer
       select(ng-options='cust.id as cust.name for cust in down.customers | filter:down.filterCustById()', ng-model='cust', ng-change='down.getExpiration(cust)').form-control
-        option(style='display:none', value='') Select...
-      button(type='button', ng-click='down.getCustomerInvoice(cust)', data-toggle='dropdown', aria-haspopup='true', ng-disabled='cust == undefined').btn.btn-default.dropdown-toggle Get Invoice Data
+        option(style='display:none', value='') Wählen...
+      button(type='button', ng-click='down.getCustomerInvoice(cust)', data-toggle='dropdown', aria-haspopup='true', ng-disabled='cust == undefined').btn.btn-default.dropdown-toggle Rechnungsdaten abrufen
     .row.top-buffer
       .col-lg-12
         .row(ng-repeat='item in down.expexpiredlist track by $index')
@@ -34,42 +34,42 @@ h1 {{down.title}}
       .col-lg-2
         a(href='#', ng-click='exportToExcel()', role='button', ng-disabled='down.disableexcel').btn.btn-default.btn-md
           span.glyphicon.glyphicon-share
-          |  Export to EXCEL
+          |  Nach EXCEL exportieren
       .col-lg-2.hide
         a(href='#', ng-click='down.exportToCsv(cust)', role='button', ng-disabled='down.disableexcel').btn.btn-default.btn-md
           span.glyphicon.glyphicon-open-file
-          |  Export to CSV
+          |  Nach CSV exportieren
       .col-lg-2
         a(href='#', ng-click='down.markAsBilled(cust)', role='button', ng-disabled='down.disableexcel').btn.btn-danger.btn-md
           span.glyphicon.glyphicon-folder-close
-          |  Mark as Invoiced {{down.nextuid}}
+          |  Als in Rechnung gestellt markieren {{down.nextuid}}
     .row.top-buffer
       .col-lg-12
         .row(id='fullinvoicedata')
           table.table.table-striped(ng-if="down.selcustshipmentseu.length!=0")
             thead.hide
               tr
-                th(ng-style="{'background-color':'red'}").hide INTERNAL USE ONLY
+                th(ng-style="{'background-color':'red'}").hide NUR FÜR INTERNEN GEBRAUCH
                 th(ng-style="{'background-color':'red'}").hide
-                th(ng-style="{'background-color':'red'}").hide INTERNAL USE ONLY
+                th(ng-style="{'background-color':'red'}").hide NUR FÜR INTERNEN GEBRAUCH
                 th(ng-style="{'background-color':'red'}").hide
-                th(ng-style="{'background-color':'red'}").hide INTERNAL USE ONLY
+                th(ng-style="{'background-color':'red'}").hide NUR FÜR INTERNEN GEBRAUCH
                 th(ng-style="{'background-color':'red'}").hide
-                th(ng-style="{'background-color':'red'}").hide INTERNAL USE ONLY
+                th(ng-style="{'background-color':'red'}").hide NUR FÜR INTERNEN GEBRAUCH
                 th(ng-style="{'background-color':'red'}").hide
-                th(ng-style="{'background-color':'red'}").hide INTERNAL USE ONLY
+                th(ng-style="{'background-color':'red'}").hide NUR FÜR INTERNEN GEBRAUCH
                 th(ng-style="{'background-color':'red'}").hide
-                th(ng-style="{'background-color':'red'}").hide INTERNAL USE ONLY
+                th(ng-style="{'background-color':'red'}").hide NUR FÜR INTERNEN GEBRAUCH
                 th(ng-style="{'background-color':'red'}").hide
-                th(ng-style="{'background-color':'red'}").hide INTERNAL USE ONLY
+                th(ng-style="{'background-color':'red'}").hide NUR FÜR INTERNEN GEBRAUCH
                 th(ng-style="{'background-color':'red'}").hide
-                th(ng-style="{'background-color':'red'}").hide INTERNAL USE ONLY
+                th(ng-style="{'background-color':'red'}").hide NUR FÜR INTERNEN GEBRAUCH
             thead
               tr
                 th Datum
                 th Referenz
                 th Sendungsnummer
-                th Supplier
+                th Lieferant
                 th Anzahl
                 th Versandart
                 th Land
@@ -81,7 +81,7 @@ h1 {{down.title}}
                 th EK
                 th HT
                 th USt.
-                th(ng-style="{'background-color':'red'}").hide INTERNAL USE ONLY
+                th(ng-style="{'background-color':'red'}").hide NUR FÜR INTERNEN GEBRAUCH
             tbody
               tr(ng-repeat='shipmentrow in down.selcustshipmentseu', ng-class='{danger: shipmentrow.netek>shipmentrow.netvk && shipmentrow.netvk!=0, warning:shipmentrow.netht!="", danger:shipmentrow.netvk==0 && shipmentrow.netht==0}',ng-style="{{down.getStyle(shipmentrow.netek,shipmentrow.netvk,shipmentrow.netht)}}",ng-init='down.totalvk=down.totalvk+shipmentrow.netvk;down.totalek=down.totalek+shipmentrow.netek;down.totalht=down.totalht+shipmentrow.netht;down.totalneteu=down.totalneteu+shipmentrow.netvk+shipmentrow.netht')
                 td {{shipmentrow.labeldate | date: 'dd.MM.yyyy'}}
@@ -105,8 +105,9 @@ h1 {{down.title}}
                 td {{shipmentrow.netek | number:2}}
                 td {{shipmentrow.netht | number:2}}
                 td {{shipmentrow.main_vat_code}}
-                td(ng-style="{'background-color':'red'}").hide INTERNAL USE ONLY
+                td(ng-style="{'background-color':'red'}").hide NUR FÜR INTERNEN GEBRAUCH
               tr
+                td
                 td
                 td
                 td
@@ -135,7 +136,7 @@ h1 {{down.title}}
                 th Datum
                 th Referenz
                 th Sendungsnummer
-                th Supplier
+                th Lieferant
                 th Anzahl
                 th Versandart
                 th Absender

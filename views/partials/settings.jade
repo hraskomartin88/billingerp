@@ -2,7 +2,7 @@ h1 {{settings.title}}
 
 .row
   .col-lg-12
-    h4 Fuel Surcharge
+    h4 Treibstoffzuschlag
     form.form-inline
       div.form-group
       .row
@@ -25,11 +25,11 @@ h1 {{settings.title}}
                   span %
           .row.top-buffer
             .col-lg-12
-              button(ng-click='settings.addFuelSurcharge()', ng-disabled='settings.checkinputs()').btn.btn-default Add
+              button(ng-click='settings.addFuelSurcharge()', ng-disabled='settings.checkinputs()').btn.btn-default Hinzufügen
         .col-lg-4
           table.table
             thead
-              th Month
+              th Monat
               th Standard
               th Express
             tbody(ng-repeat='datefuel in settings.fuelhistory')
@@ -39,7 +39,7 @@ h1 {{settings.title}}
     hr
 .row
   .col-lg-12
-    h4 Maut Surcharge
+    h4 Mautzuschlag
     form.form-inline
       div.form-group
       .row
@@ -60,12 +60,12 @@ h1 {{settings.title}}
                   span €
           .row.top-buffer
             .col-lg-12
-              button(ng-click='settings.addMautSurcharge()', ng-disabled='settings.checkmautinputs()').btn.btn-default Add
+              button(ng-click='settings.addMautSurcharge()', ng-disabled='settings.checkmautinputs()').btn.btn-default Hinzufügen
         .col-lg-4
           table.table
             thead
               tr
-                th Added
+                th Hinzugefügt
                 th AT
                 th AT+DE
             tbody(ng-repeat='datemaut in settings.currentmaut')
@@ -76,7 +76,7 @@ h1 {{settings.title}}
     hr
 .row
   .col-lg-12
-    h4 Private delivery
+    h4 Zustellung an Privatadressen
     form.form-inline
       div.form-group
       .row
@@ -89,13 +89,13 @@ h1 {{settings.title}}
                   span €
           .row.top-buffer
             .col-lg-12
-              button(ng-click='settings.addPrivateSurchargeSettings()', ng-disabled='settings.checkprivateinput()').btn.btn-default Add
+              button(ng-click='settings.addPrivateSurchargeSettings()', ng-disabled='settings.checkprivateinput()').btn.btn-default Hinzufügen
         .col-lg-4
           table.table
             thead
               tr
-                th Added
-                th Price (in Euro)
+                th Hinzugefügt
+                th Preise (in Euro)
             tbody(ng-repeat='dateprivate in settings.currentprivate')
               tr
                 td {{dateprivate.dateofadd | date: 'dd/MM/yyyy HH:mm'}}
@@ -103,7 +103,7 @@ h1 {{settings.title}}
     hr
 .row
   .col-lg-12
-    h4 C.O.D.
+    h4 Nachnahme
     form.form-inline
       div.form-group
       .row
@@ -131,12 +131,12 @@ h1 {{settings.title}}
                   span €
           .row.top-buffer
             .col-lg-12
-              button(ng-click='settings.addCodSurchargeSettings()',ng-disabled='settings.checkcodinput()').btn.btn-default Add
+              button(ng-click='settings.addCodSurchargeSettings()',ng-disabled='settings.checkcodinput()').btn.btn-default Hinzufügen
         .col-lg-4
           table.table
             thead
               tr
-                th Added
+                th Hinzugefügt
                 th AT
                 th DE
                 th INT.
@@ -150,4 +150,4 @@ h1 {{settings.title}}
     hr
 .row.top-buffer
   .col-lg-12
-    h4 VAT Matrix
+    h4 MwSt Matrix

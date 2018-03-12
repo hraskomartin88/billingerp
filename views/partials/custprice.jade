@@ -1,23 +1,23 @@
 .row
   .col-lg-6
     h1
-      a(href='', ng-click='scrollTo("price")') Prices
+      a(href='', ng-click='scrollTo("price")') Preise
       | , 
-      a(href='', ng-click='scrollTo("zone")') Zones
-      |  and 
-      a(href='', ng-click='scrollTo("surcharge")') Surcharges
-      |  Setup
+      a(href='', ng-click='scrollTo("zone")') Zonen
+      |  und 
+      a(href='', ng-click='scrollTo("surcharge")') Zuschläge
+      |  Konfiguration
 
 .row
   .col-lg-2
-    h4 SUPPLIERS
+    h4 LIEFERANTEN
     form
       div(ng-repeat='item in price.suppliers').checkbox
         label
           input(id='item.main_supplier_alpha3', value='item.main_supplier_alpha3', ng-checked='price.supplselection.indexOf(item.main_supplier_alpha3) > -1', ng-click='price.suppltoggleSelection(item.main_supplier_alpha3)', type='checkbox', checkbox-group)
           |  {{item.main_supplier_alpha3}}
   .col-lg-4
-    h4 SERVICES
+    h4 DIENSTLEISTUNGEN
     form
       div(ng-repeat='item in price.maindata', ng-show='price.supplselection.indexOf(item.main_supplier_alpha3) != -1').checkbox
         label
@@ -31,46 +31,46 @@
             input(id='multichkbox', type='checkbox', checkbox-group, ng-click='price.servtoggleSelection(0)',ng-checked='price.servselection.indexOf(0) > -1')
             | DHL/UPS Multi?!
       div.form-group
-        label(for='numberofzones').control-label Number of Zones
+        label(for='numberofzones').control-label Anzahl der Zonen
         input(type='number',min='1',max='30', id='numberofzones', ng-model='price.zonenr').form-control
       div.form-group
-        button(type='button', ng-disabled='price.selectionbit == 0', ng-click='price.allSelected()').btn.btn-default Add
+        button(type='button', ng-disabled='price.selectionbit == 0', ng-click='price.allSelected()').btn.btn-default Hinzufügen
 .row
   .col-lg-12
     hr
 .row
   .col-lg-12
     legend(id='price')
-      h4 PRICES
+      h4 PREISE
     .row(ng-repeat='item in price.custvktables track by $index').top-buffer
       .col-lg-12
         strong {{item | servicebitdisplay:item:price.maindata}} 
-        button(type='button', ng-click='price.deletePrice(item)').btn.btn-xs.btn-danger Delete
+        button(type='button', ng-click='price.deletePrice(item)').btn.btn-xs.btn-danger Löschen
         .row.top-buffer(flow-init='{query:{type:2}}', flow-files-submitted='$flow.upload()',flow-file-success='price.completePriceImport.controllerFn($flow,$file,$message,$index)')
           .col-lg-4.btn-toolbar
             a(href='#', role='button', ng-click='price.savePrice(item)').btn.btn-default.btn-md
               span.glyphicon.glyphicon-save
-              | Save Price
+              | Preis sparen
             a(href='#', role='button', ng-click='price.exportPrice(item)').btn.btn-default.btn-md
               span.glyphicon.glyphicon-export
-              | Export Price
+              | Exportpreis
             span.btn.btn-default.btn-md(flow-btn)
               span.glyphicon.glyphicon-import
-              | Import Price
+              | Importpreis
           .col-lg-8.btn-toolbar.top-buffer
             datepicker(ng-model='price.dt[item]', ng-init="price.getExpiration(item)", ng-change="price.setExpiration(item, price.dt[item])" ,min-mode='month',datepicker-mode="'month'")
             div(role='alert',collapse='price.isCollapsedExpiration[item]').alert.alert-success
               button(type='button', data-dismiss='alert', aria-label='Close').close
                 span(aria-hidden='true') &times;
-              | The expiration date was successfully saved!
+              | Das Ablaufdatum wurde erfolgreich gepspeichert!
           .col-lg-12.btn-toolbar.top-buffer
             p
             a(href='#', role='button', ng-click='price.addPriceZone(item)').btn.btn-default.btn-sm
               span.glyphicon.glyphicon-plus
-              |  Add Zone
+              |  Zone hinzufügen
             a(href='#', role='button', ng-click='price.removePriceZone(item)').btn.btn-default.btn-sm
               span.glyphicon.glyphicon-minus
-              |  Remove Last Zone
+              |  Letzte Zone entfernen
         .row.top-buffer
           .col-lg-12
             table.table.table-striped
@@ -85,15 +85,15 @@
           .col-lg-12.btn-toolbar
             button(type='button', ng-click='price.addNewRow(item)').btn.btn-sm.btn-default
               i.glyphicon.glyphicon-plus
-              |  Add New Row
+              |  Neue Zeile hinzufügen
             button(type='button', ng-click='price.removeLastRow(item)').btn.btn-sm.btn-default
               i.glyphicon.glyphicon-minus
-              |  Remove Last Row
+              |  Letzte Zeile entfernen
         hr
 .row
   .col-lg-12
     legend(id='surcharge')
-      h4 SURCHARGES
+      h4 ZUSCHLÄGE
     .row
       .col-lg-12
         strong TREIBSTOFF
@@ -105,7 +105,7 @@
       .col-lg-12.checkbox
         label
           input(type='checkbox', id='price.fixedpercentage', ng-model='price.fixedchecked', ng-disabled='price.globalchecked')
-          | Fixed %
+          | Fix %
     .row
       form
         .col-lg-4
@@ -126,13 +126,13 @@
       .col-lg-12.btn-toolbar
         a(href='#', role='button', ng-click='price.saveFuelSurcharge()',ng-disabled='price.checkinputs()').btn.btn-default.btn-md
           span.glyphicon.glyphicon-save
-          | Save
+          | Speichern
     .row.top-buffer
       .col-lg-12.btn-toolbar
         div(role='alert',collapse='price.isCollapsedSurcharge').alert.alert-success
           button(type='button', data-dismiss='alert', aria-label='Close').close
             span(aria-hidden='true') &times;
-          | The price was successfully saved!
+          | Der Preis wurde erfolgreich gespeichert!
     hr
     .row
       .col-lg-12
@@ -145,7 +145,7 @@
       .col-lg-12.checkbox
         label
           input(type='checkbox', id='price.mautfixed', ng-model='price.mautfixedchecked', ng-disabled='price.mautglobalchecked')
-          | Fixed
+          | Fix
     .row
       form
         .col-lg-4
@@ -166,13 +166,13 @@
       .col-lg-12.btn-toolbar
         a(href='#', role='button', ng-click='price.addMautSurchargeCust()',ng-disabled='price.checkmautinputs()').btn.btn-default.btn-md
           span.glyphicon.glyphicon-save
-          | Save
+          | Speichern
     .row.top-buffer
       .col-lg-12.btn-toolbar
         div(role='alert',collapse='price.isCollapsedMautSurcharge').alert.alert-success
           button(type='button', data-dismiss='alert', aria-label='Close').close
             span(aria-hidden='true') &times;
-          | The price was successfully saved!
+          | Der Preis wurde erfolgreich gespeichert!
     hr
     .row
       .col-lg-12
@@ -185,13 +185,13 @@
       .col-lg-12.checkbox
         label
           input(type='checkbox', id='price.privatefixed', ng-model='price.privatefixedchecked', ng-disabled='price.privateglobalchecked')
-          | Fixed
+          | Fix
     .row
       form
         .col-lg-4
           .row
             .col-lg-4
-              label PRICE
+              label PREIS
               div.input-group
                 input(type='text', id='price.privateprice', ng-disabled='price.privateglobalchecked', ng-model='price.privateprice', decprice).form-control
                 span.input-group-addon
@@ -200,13 +200,13 @@
       .col-lg-12.btn-toolbar
         a(href='#', role='button', ng-click='price.addPrivateSurchargeCust()', ng-disabled='price.checkprivateinput()').btn.btn-default.btn-md
           span.glyphicon.glyphicon-save
-          | Save
+          | Speichern
     .row.top-buffer
       .col-lg-12.btn-toolbar
         div(role='alert', collapse='price.isCollapsedPrivateSurcharge').alert.alert-success
           button(type='button', data-dismiss='alert', aria-label='Close').close
             span(aria-hidden='true') &times;
-          | The price was successfully saved!
+          | Der Preis wurde erfolgreich gespeichert!
     hr
     .row
       .col-lg-12
@@ -219,7 +219,7 @@
       .col-lg-12.checkbox
         label
           input(type='checkbox', id='price.codfixed', ng-model='price.codfixedchecked', ng-disabled='price.codglobalchecked')
-          | Fixed
+          | Fix
     .row
       form
         .col-lg-4
@@ -248,35 +248,35 @@
       .col-lg-12.btn-toolbar
         a(href='#', role='button', ng-click='price.addCodSurchargeCust()', ng-disabled='price.checkcodinput()').btn.btn-default.btn-md
           span.glyphicon.glyphicon-save
-          | Save
+          | Speichern
     .row.top-buffer
       .col-lg-12.btn-toolbar
         div(role='alert', collapse='price.isCollapsedCodSurcharge').alert.alert-success
           button(type='button', data-dismiss='alert', aria-label='Close').close
             span(aria-hidden='true') &times;
-          | The price was successfully saved!
+          | Der Preis wurde erfolgreich gespeichert
     hr
 .row
   .col-lg-12
     legend(id='zone')
-      h4 ZONES
+      h4 ZONEN
     .row(flow-init='{query:{type:1}}', flow-files-submitted='$flow.upload()', flow-file-success='price.zoneCompleteUpload.controllerFn($flow,$file,$message)')
       .col-lg-12.btn-toolbar
         a(href='#', role='button', ng-click='price.saveZone()').btn.btn-default.btn-md
           span.glyphicon.glyphicon-save
-          |  Save Zones
+          |  Zonen speichern
         a(href='#', role='button', ng-click='price.exportZone(price.zones)').btn.btn-default.btn-md
           span.glyphicon.glyphicon-export
-          |  Export Zones
+          |  Zonen exportieren
         span.btn.btn-default.btn-md(flow-btn)
           span.glyphicon.glyphicon-import
-          |  Import Zones
+          |  Zonen importieren
     .row.top-buffer
       .col-lg-12
         table.table.table-striped
           tr
             input(placeholder='search..',type='text', class='input-sm form-control', ng-model='searchText')
-            th COUNTRY
+            th LAND
             // {{serv | servicebitdisplay:serv:price.maindata}}
             th(ng-repeat='serv in price.custvktables') {{serv | servicebitdisplay:serv:price.maindata}}
           tr(ng-repeat='(key,data) in price.zones | filter: searchText track by $index')

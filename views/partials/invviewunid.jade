@@ -4,19 +4,19 @@ h2 {{subtitle}}
 form.form-inline
   section(sticky-nav)
     select(ng-options='cust.id as cust.name for cust in customers', ng-model='cust').form-control
-      option(style='display:none', value='') Select...
-    button(type='button', ng-click='getSelectedRows()', data-toggle='dropdown', aria-haspopup='true', ng-disabled='cust == undefined').btn.btn-default.dropdown-toggle Set Customer 
+      option(style='display:none', value='') Wählen...
+    button(type='button', ng-click='getSelectedRows()', data-toggle='dropdown', aria-haspopup='true', ng-disabled='cust == undefined').btn.btn-default.dropdown-toggle Legen den ausgewählten Kunden fest 
       span.badge
         {{selectedcount}}
 
 
 table(st-table='data').table
   thead
-    th TrackingNumber
-    th AccountNumber
-    th LabelDate
-    th Reference1
-    th Reference2
+    th Trackingnummer
+    th Kontonummer
+    th Etikett Datum
+    th Referenz1
+    th Referenz2
   tbody
     tr(st-select-row='row', st-select-mode='multiple', ng-repeat='row in data')
       td {{row.trackingnumber}}

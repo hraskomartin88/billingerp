@@ -5,13 +5,13 @@ h1 {{maninvsrchg.title}}
         table(st-table='maninvsrchg.data').table.table-striped
             thead
                 th ID
-                th trackingnumber
-                th labeldate
-                th surcharge
-                th customer
-                th ek
-                th vk
-                th action
+                th Trackingnummer
+                th Etikett Datum
+                th Zuschlag
+                th Kunde
+                th EK
+                th VK
+                th Aktionen
             tbody
                 tr(ng-repeat='row in maninvsrchg.data')
                     td {{row.id}}
@@ -22,4 +22,4 @@ h1 {{maninvsrchg.title}}
                     td {{row.manually_ek}}
                     td {{row.manually_vk}}
                     td
-                        button(type='button', ng-click='maninvsrchg.delManSrchg(row.id)').btn.btn-xs.btn-danger DELETE
+                        button(type='button', ng-click='maninvsrchg.delManSrchg(row.id)').btn.btn-xs.btn-danger LÖSCHEN

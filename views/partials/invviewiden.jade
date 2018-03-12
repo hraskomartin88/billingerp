@@ -3,13 +3,13 @@ h2 {{subtitle}}
 
 table(st-table='data').table
   thead
-    th TrackingNumber
-    th AccountNumber
-    th LabelDate
-    th Reference1
-    th Reference2
-    th Customer
-    th Actions
+    th Trackingnummer
+    th Kontonummer
+    th Etikett Datum
+    th Referenz1
+    th Referenz2
+    th Kunde
+    th Aktionen
   tbody
     tr(ng-repeat='row in data')
       td {{row.trackingnumber}}
@@ -19,4 +19,4 @@ table(st-table='data').table
       td {{row.reference2}}
       td {{row.name}}
       td
-        button(type='button', ng-click='unsetSelected(row)').btn.btn-xs.btn-info Unidentify
+        button(type='button', ng-click='unsetSelected(row)').btn.btn-xs.btn-info Unidentifikation

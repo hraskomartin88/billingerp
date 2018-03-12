@@ -4,10 +4,10 @@ h1 {{manually.title}}
   .row
     .col-lg-8
       .col-lg-6
-        label ShipmentDate
+        label Versanddatum
         datepicker(ng-model='manually.mandata.dateof',min-mode='day',datepicker-mode="'day'")
       .col-lg-6
-        label MonthToInvoice
+        label Monat zur Rechnung
         datepicker(ng-model='manually.mandata.dateofinv', min-mode='month',datepicker-mode="'month'")
 
 .row.top-buffer
@@ -20,21 +20,21 @@ h1 {{manually.title}}
   .row
     .col-lg-8
       .col-lg-4
-        label Forwarder
+        label Spediteur
         select(ng-model='manually.mandata.forwarders.selectedOption', ng-options='option1.name for option1 in manually.mandata.forwarders.availableOptions track by option1.id').form-control
-          option(style='display:none', value='') Select...
+          option(style='display:none', value='') Wählen...
       .col-lg-4
         label Service
         select(ng-model='manually.mandata.services.selectedOption', ng-options='option2.name for option2 in manually.mandata.services.availableOptions track by option2.id').form-control
-          option(style='display:none', value='') Select...
+          option(style='display:none', value='') Wählen...
       .col-lg-4
-        label Customer
+        label Kunde
         select(ng-model='manually.mandata.customers.selectedOption', ng-options='option3.name for option3 in manually.mandata.customers.availableOptions track by option3.id').form-control
-          option(style='display:none', value='') Select..
+          option(style='display:none', value='') Wählen..
   .row.top-buffer
     .col-lg-12
       .col-lg-2
-        label InvoiceNr.
+        label Rechnungsnummer
         input(type='text', ng-model='manually.mandata.invoicenr').form-control
       .col-lg-2
         label EK
@@ -49,14 +49,14 @@ h1 {{manually.title}}
           span.input-group-addon
             span EUR
       .col-lg-2
-        label VAT
+        label MwSt
         select(ng-model='manually.mandata.vat.selectedOption', ng-options='(option77.main_vat_code + " " + option77.name + " " + option77.percentage*100 + "%") for option77 in manually.mandata.vat.availableOptions track by option77.id').form-control
         //{{manually.mandata.vat.selectedOption}}
 
   .row.top-buffer
     .col-lg-8
       .col-lg-3
-        label Weight
+        label Gewicht
         div.input-group
           input(type='text', ng-model='manually.mandata.weight',decprice).form-control
           span.input-group-addon
@@ -67,14 +67,14 @@ h1 {{manually.title}}
       .col-lg-3
         label Service
         select(ng-model='manually.mandata.servicetype.selectedOption', ng-options='option88.name for option88 in manually.mandata.servicetype.availableOptions track by option88.id').form-control
-          option(style='display:none', value='') Select..
+          option(style='display:none', value='') Wählen..
   .row.top-buffer
     .col-lg-8
       .col-lg-3
-        label Trackingnumber
+        label Trackingnummer
         input(type='text', ng-model='manually.mandata.trackingnr').form-control
       .col-lg-3
-        label Reference
+        label Referenz
         input(type='text', ng-model='manually.mandata.reference').form-control
   hr
 
@@ -85,10 +85,10 @@ h1 {{manually.title}}
       table.table.table-striped
         thead
           tr
-            th Surcharge
+            th Zuschlag
             th EK
             th VK
-            th VAT
+            th MwSt
             th Action
         tbody
           tr(ng-repeat='things in manually.mandata.sonstiges')
@@ -101,9 +101,9 @@ h1 {{manually.title}}
   .row
     .col-lg-10
       .col-lg-2
-        label Surcharges
+        label Zuschläge
         select(ng-model='manually.mandata.surcharges.selectedOption', ng-options='option6.name for option6 in manually.mandata.surcharges.availableOptions track by option6.id').form-control
-          option(style='display:none', value='') Select..
+          option(style='display:none', value='') Wählen..
       .col-lg-2
         label EK
         div.input-group
@@ -117,55 +117,55 @@ h1 {{manually.title}}
           span.input-group-addon
             span EUR
       .col-lg-2
-        label VAT
+        label MwSt
         select(ng-model='manually.mandata.vat2.selectedOption', ng-options='(option78.main_vat_code + " " + option78.name + " " + option78.percentage*100 + "%") for option78 in manually.mandata.vat2.availableOptions track by option78.id').form-control
       .col-lg-2
         label &nbsp;
-        button(type='button', ng-disabled='false', ng-click='manually.mandata.addmanSurcharge()').btn.btn-default.form-control Add
+        button(type='button', ng-disabled='false', ng-click='manually.mandata.addmanSurcharge()').btn.btn-default.form-control Hinzufügen
   hr
 
 .row.top-buffer
-  h4 FROM
+  h4 Von
   .row
     .col-lg-8
       .col-lg-3
-        label Company Name
+        label Name der Firma
         input(type='text', ng-model='manually.mandata.from.companyname').form-control
       .col-lg-3
-        label Contact Name
+        label Kontaktname
         input(type='text', ng-model='manually.mandata.from.contactname').form-control
   .row.top-buffer
     .col-lg-8
       .col-lg-3
-        label Country
+        label Land
         //select(ng-model='manually.mandata.from.country').form-control
         select(ng-model='manually.mandata.country.selectedOption', ng-options='option4.name for option4 in manually.mandata.country.availableOptions track by option4.id').form-control
-          option(style='display:none', value='') Select..
+          option(style='display:none', value='') Wählen..
       .col-lg-3
-        label Postalcode
+        label Postleitzahl
         input(type='text', ng-model='manually.mandata.from.postalcode').form-control
   hr
 
 .row.top-buffer
-  h4 TO
+  h4 Nach
   .row
     .col-lg-8
       .col-lg-3
-        label Company Name
+        label Name der Firma
         input(type='text', ng-model='manually.mandata.to.companyname').form-control
       .col-lg-3
-        label Contact Name
+        label Kontaktname
         input(type='text', ng-model='manually.mandata.to.contactname').form-control
   .row.top-buffer
     .col-lg-8
       .col-lg-3
-        label Country
+        label Land
         select(ng-model='manually.mandata.country.selectedOption2', ng-options='option5.name for option5 in manually.mandata.country.availableOptions track by option5.id').form-control
-          option(style='display:none', value='') Select..
+          option(style='display:none', value='') Wählen..
       .col-lg-3
-        label Postalcode
+        label Postleitzahl
         input(type='text', ng-model='manually.mandata.to.postalcode').form-control
   hr
 
 .row.top-buffer
-  button(type='button', ng-click='manually.mandata.saveManData()').btn.btn-default Save
+  button(type='button', ng-click='manually.mandata.saveManData()').btn.btn-default Speichern
