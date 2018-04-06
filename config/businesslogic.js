@@ -285,7 +285,7 @@ function processUPSHU(supplier,dateofinv,filename){
   var stream = fs.createReadStream(path.join('./public/upload/',filename));
   var rowCount = 0;
   var transformer = csv.transform(function(data){
-    if(data.tempservice.indexOf('27.000 % Tax')==-1 && data.netamount!=='0.00'){
+    if(data.tempservice.indexOf('27.000 % Tax')==-1 && (data.netamount!=='0.00' || data.tempservice.indexOf('pótdíj')>-1)){
       if(data.zuschlag1 == 'ADJ' && data.zuschlag2=='RADJ'){
         data.tempservice += ' ÄNDERUNG';
       }
