@@ -74,6 +74,7 @@ h1 {{down.title}}
                 th Versandart
                 th Land
                 th Gewicht
+                th Gewicht (eingegebenes)
                 th Netto
                 th MWST
                 th Brutto
@@ -93,6 +94,8 @@ h1 {{down.title}}
                 td {{shipmentrow.receiver_country}}
                 td(ng-if="shipmentrow.weight_billed!==''") {{shipmentrow.weight_billed | number:2}}
                 td(ng-if="shipmentrow.weight_billed==''")
+                td(ng-if="shipmentrow.weight_entered!==''") {{shipmentrow.weight_entered | number:2}}
+                td(ng-if="shipmentrow.weight_entered==''")
                 td(ng-if="shipmentrow.netvk!='0'") {{shipmentrow.netvk | number:2}}
                   //div(click-to-edit="shipmentrow.netvk")
                 td(ng-if="shipmentrow.netvk==''") {{shipmentrow.netht | number:2}}
@@ -107,6 +110,7 @@ h1 {{down.title}}
                 td {{shipmentrow.main_vat_code}}
                 td(ng-style="{'background-color':'red'}").hide NUR FÜR INTERNEN GEBRAUCH
               tr
+                td
                 td
                 td
                 td

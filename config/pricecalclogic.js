@@ -137,7 +137,7 @@ function findPriceorHt(datatocheck, vkhttbls,callback){
       callback(null);
     })
     //console.log(item);
-    
+
   },function(err){
     if (err) console.log('findpriceorht:' + err);
     //console.log(datatocheck[3]);
@@ -246,8 +246,14 @@ function findPriceorHt(datatocheck, vkhttbls,callback){
             }else{
 
             }*/
-            
-            db.powerQuery(datatocheck[key].receiver_country,datatocheck[key].relevant[0],datatocheck[key].weight_billed, function(err,result){
+            let weightusedhere;
+            if(datatocheck[key].weightenteredbit == '1' && datatocheck[key].alpha3=='UPS' && datatocheck[key].tempservice=='STANDARD SINGLE'){
+              weightusedhere = JSON.parse(JSON.stringify(datatocheck[key].weight_entered));
+            }else{
+              weightusedhere = JSON.parse(JSON.stringify(datatocheck[key].weight_billed));
+            }
+
+            db.powerQuery(datatocheck[key].receiver_country,datatocheck[key].relevant[0], weightusedhere, function(err,result){
               if(err){
                 //console.log('powerquery');
                 //fs.appendFile('output_logger__.txt', JSON.stringify(datatocheck[key]) + '\r\n' + err + '\r\n',function(err){});
@@ -462,7 +468,7 @@ function findVATCode(whichinvoice,callback){
         //console.log(datasurchargearr);
         //console.log(eucountries);
         //console.log(vatmatrix);
-        
+
       }
     ], function(err,dataarrupd_,datasurchargearrupd_){
       if(err) console.log(err);
@@ -476,7 +482,7 @@ function findVATCode(whichinvoice,callback){
       });
       //console.log(dataarrupd_);
       //console.log(datasurchargearrupd_);
-      
+
       //callback();
     })
   //receiver_country
@@ -487,7 +493,7 @@ function findVATCode(whichinvoice,callback){
 
 function composeVAT(arrayofdata,vatmatrix,eucountries,callback){
   var arraytemp = [];
-  async.eachSeries(arrayofdata, function iterator(item,callback){
+  async.each(arrayofdata, function iterator(item,callback){
     //console.log(item);
     var tempo = {
       id: item.id,
@@ -628,7 +634,7 @@ function surchargePriceCalculation(checkthisitem, callback){
             console.log(err);
             callback(err);
           }
-          
+
           //SAJAT VAGY GLOBAL VAGY MAS
           var calcwithwhat = parseFloat(0.00);
           if(parseFloat(stdexp[0][0].custprice)===-1.00){
