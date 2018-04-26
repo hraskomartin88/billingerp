@@ -8,6 +8,10 @@ var path = require('path');
 var async = require('async');
 var zservarr = ['null','stdsingle','stdmulti','exp'];
 
+const safecompare = require('safe-compare');
+const simpleGit = require('simple-git');
+const crypto = require('crypto');
+
 module.exports = function(app){
 
   String.prototype.startsWith = function(needle){
@@ -36,6 +40,23 @@ module.exports = function(app){
       }
     });
   });*/
+  app.post('/webhook', function(req,res){
+    console.log('webhook called');
+    var payloadstring = 'sha1=' + crypto.createHmac('sha1', 'abcd54321').update(JSON.stringify(req.body)).digest('hex');
+    //console.log(safecompare(payloadstring, req.headers['x-hub-signature']));
+    if(safecompare(payloadstring, req.headers['x-hub-signature'])){
+      if(req.body.ref == 'refs/heads/master'){
+        //console.log(req.body);
+        simpleGit().pull(function(err, resp){
+          console.log(err);
+          console.log(resp);
+        });
+      }
+      res.status(200).json({success: true, message: 'webhook ok'});
+    }else{
+      res.status(401).json({sucess: false, message: 'Not authorized'});
+    }
+  });
 
   //ANGULARJS
   app.get('/api/getcustomers',function(req,res){

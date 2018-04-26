@@ -6,6 +6,7 @@
     "async": "^2.6.0",
     "body-parser": "^1.18.2",
     "compression": "^1.7.2",
+    "crypto": "^1.0.1",
     "csv": "^2.0.0",
     "error-handler": "^0.1.4",
     "errorhandler": "^1.5.0",
@@ -17,6 +18,8 @@
     "morgan": "^1.9.0",
     "multer": "0.1.8",
     "mysql": "^2.15.0",
-    "serve-favicon": "^2.4.5"
+    "safe-compare": "^1.1.0",
+    "serve-favicon": "^2.4.5",
+    "simple-git": "^1.89.0"
   }
 }
