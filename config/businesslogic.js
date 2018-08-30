@@ -735,7 +735,7 @@ function processUPSHU2(output_,invoices_){
     function nextThingsToDowiththings(invoices,surcharges,servicesstdexp,callback){
       var zuschlag = [];
       //console.log(surcharges);
-      async.eachSeries(output_,function iterator(item,callback){
+      async.each(output_,function iterator(item,callback){
         //'000002011215'
         for(var i=0,len=invoices.length;i<len;++i){
           if(invoices[i].hasOwnProperty(item.invoiceno)){
@@ -1191,7 +1191,7 @@ function processUPSDE2(output_,invoices_){
     function nextThingsToDo(invoicedata,surcharges,servicesstdexp,callback){
       var zuschlag = [];
 
-      async.eachSeries(output_, function iterator(item,callback){
+      async.each(output_, function iterator(item,callback){
         for(var i=0,len=invoicedata.length;i<len;++i){
           if(invoicedata[i].hasOwnProperty(item.invoiceno)){
             item.main_invoice_id = invoicedata[i][item.invoiceno];
