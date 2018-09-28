@@ -1140,7 +1140,7 @@ angular.module('billingErp.controllers', ['smart-table','billingErp.services']).
         //$scope.down.selcustshipmentseu = response[0];
         $scope.down.selcustshipmentseu = response[0];
         $scope.down.selcustshipmentman = response[1];
-        console.log($scope.down.selcustshipmentseu);
+        //console.log($scope.down.selcustshipmentseu);
                 $scope.down.osszvk = $scope.down.selcustshipmentseu[$scope.down.selcustshipmentseu.length - 3]; //osszVK
                 $scope.down.osszht = $scope.down.selcustshipmentseu[$scope.down.selcustshipmentseu.length - 2]; //osszHT
                 $scope.down.osszek = $scope.down.selcustshipmentseu[$scope.down.selcustshipmentseu.length - 1]; // osszEK
@@ -1159,12 +1159,15 @@ angular.module('billingErp.controllers', ['smart-table','billingErp.services']).
 
                 for (let i = 0; i < hossz; i++) {
                     teljesmaut = teljesmaut + $scope.down.selcustshipmentseu[i].mautzuschlag;
+                    teljesmaut = parseFloat(teljesmaut.toFixed(2));
                     teljestreibstoff = teljestreibstoff + $scope.down.selcustshipmentseu[i].treibstoffzuschlag;
+                    teljestreibstoff = parseFloat(teljestreibstoff.toFixed(2));
                     teljesnetvk = teljesnetvk + $scope.down.selcustshipmentseu[i].netvk;
-                    if ($scope.down.selcustshipmentseu[i].netvk != null) {
-                        teljesmwst = teljesmwst + ($scope.down.selcustshipmentseu[i].netvk * $scope.down.selcustshipmentseu[i].percentage);
-                        teljesbrutto = teljesbrutto + ($scope.down.selcustshipmentseu[i].netvk + ($scope.down.selcustshipmentseu[i].netvk * $scope.down.selcustshipmentseu[i].percentage));
-                    }
+                    teljesnetvk = parseFloat(teljesnetvk.toFixed(2));
+                    teljesmwst = teljesmwst + ($scope.down.selcustshipmentseu[i].netvk * $scope.down.selcustshipmentseu[i].percentage);
+                    teljesmwst = parseFloat(teljesmwst.toFixed(2));
+                    teljesbrutto = teljesbrutto + ($scope.down.selcustshipmentseu[i].netvk + ($scope.down.selcustshipmentseu[i].netvk * $scope.down.selcustshipmentseu[i].percentage));
+                    teljesbrutto = parseFloat(teljesbrutto.toFixed(2));
                 }
 
                 $scope.down.teljesmaut = teljesmaut;

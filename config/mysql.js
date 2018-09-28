@@ -1645,7 +1645,7 @@ exports.getInvoiceUploadDate =function(callback){
     //var query = "SELECT YEAR(DATETARGET) as invyear,MONTHNAME(DATETARGET) as invmonth FROM main_invoice WHERE YEAR(DATETARGET) = YEAR(CURDATE()) group by YEAR(datetarget),MONTH(datetarget) DESC LIMIT 0,3;";
     //var query = "SELECT YEAR(DATETARGET) as invyear,MONTHNAME(DATETARGET) as invmonth FROM main_invoice group by YEAR(datetarget),MONTH(datetarget) DESC;";
     var cmd = "SET @rank=0;";
-    var query = "SELECT invyear,invmonth FROM (SELECT @rank:=@rank+1 AS rank, YEAR(DATETARGET) as invyear,MONTHNAME(DATETARGET) as invmonth FROM main_invoice group by YEAR(datetarget),MONTH(datetarget) order by rank desc LIMIT 0,2) as tot;";
+    var query = "SELECT invyear,invmonth FROM (SELECT @rank:=@rank+1 AS rank, YEAR(DATETARGET) as invyear,MONTHNAME(DATETARGET) as invmonth FROM main_invoice group by YEAR(datetarget),MONTH(datetarget) order by rank desc) as tot;";
     connection.query(cmd);
     connection.query(query,function(err,result){
       if(err){
