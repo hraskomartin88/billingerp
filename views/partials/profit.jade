@@ -1,0 +1,70 @@
+h1 Profit statistics
+
+.row
+    .col-lg-12
+        .col-lg-2
+            p Please enter the percent :
+        .col-lg-2
+            input(type='text', ng-model='profit.szazalek', placeholder='%', required).form-control
+        .col-lg-2
+            p Please enter the net amount :
+        .col-lg-2
+            input(type='text', ng-model='profit.netamount', placeholder='netamount', required).form-control
+        .col-lg-1
+        span.btn.btn-default(ng-click='profit.profitszamitas()') GET DATA
+.row
+    .col-lg-12
+      label.checkbox-inline
+            input(type='checkbox', ng-change='profit.vesztesegmentes()', ng-model='profit.profitcheck')
+            | Except negative profit
+
+.row <br>
+.row <br>
+
+.row
+    .col-lg-12
+        .col-lg-6
+            p From Date:
+        .col-lg-6
+            p To Date:
+
+.row
+    .col-lg-12
+        .col-lg-6
+            datepicker(ng-model='profit.fromDate', min-mode='month',datepicker-mode="'month'")
+        .col-lg-6
+            datepicker(ng-model='profit.toDate', min-mode='month',datepicker-mode="'month'")
+.row <br>
+.row
+    .col-lg-2
+        a(href='#', ng-click='exportToExcel()', role='button',ng-disabled='profit.disableexcel').btn.btn-default.btn-md
+          span.glyphicon.glyphicon-floppy-disk
+          |  Export to Excel
+.row <br>
+.row(id='profitdata')
+    table.table.table-striped
+      thead
+        tr
+          th Customer Name
+          th Trackingnumber
+          th Number of packets
+          th Weight billed
+          th Receiver country
+          th Tempservice
+          th Label date
+          th Net amount
+          th Price
+          th Date target
+
+      tbody
+        tr(ng-repeat='row in szetvalogatas')
+          td {{row.name}}
+          td {{row.trackingnumber}}
+          td {{row.numberofpackets}}
+          td {{row.weight_billed}}
+          td {{row.receiver_country}}
+          td {{row.tempservice}}
+          td {{row.labeldate}}
+          td {{row.netamount}}
+          td {{row.pricevk}}
+          td {{row.datetarget}}

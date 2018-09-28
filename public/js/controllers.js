@@ -1140,6 +1140,51 @@ angular.module('billingErp.controllers', ['smart-table','billingErp.services']).
         //$scope.down.selcustshipmentseu = response[0];
         $scope.down.selcustshipmentseu = response[0];
         $scope.down.selcustshipmentman = response[1];
+        console.log($scope.down.selcustshipmentseu);
+                $scope.down.osszvk = $scope.down.selcustshipmentseu[$scope.down.selcustshipmentseu.length - 3]; //osszVK
+                $scope.down.osszht = $scope.down.selcustshipmentseu[$scope.down.selcustshipmentseu.length - 2]; //osszHT
+                $scope.down.osszek = $scope.down.selcustshipmentseu[$scope.down.selcustshipmentseu.length - 1]; // osszEK
+
+                //UTOLSÓ HÁROM SOR TÖRLÉSE
+                $scope.down.selcustshipmentseu.pop();
+                $scope.down.selcustshipmentseu.pop();
+                $scope.down.selcustshipmentseu.pop();
+                // AZ EXCEL TTÁBLÁZAT VÉGÉN LÉVŐ ÖSSZESÍTÉSEK
+                let teljesmaut = 0;
+                let teljestreibstoff = 0;
+                let teljesnetvk = 0;
+                let teljesmwst = 0;
+                let teljesbrutto = 0;
+                let hossz = $scope.down.selcustshipmentseu.length;
+
+                for (let i = 0; i < hossz; i++) {
+                    teljesmaut = teljesmaut + $scope.down.selcustshipmentseu[i].mautzuschlag;
+                    teljestreibstoff = teljestreibstoff + $scope.down.selcustshipmentseu[i].treibstoffzuschlag;
+                    teljesnetvk = teljesnetvk + $scope.down.selcustshipmentseu[i].netvk;
+                    if ($scope.down.selcustshipmentseu[i].netvk != null) {
+                        teljesmwst = teljesmwst + ($scope.down.selcustshipmentseu[i].netvk * $scope.down.selcustshipmentseu[i].percentage);
+                        teljesbrutto = teljesbrutto + ($scope.down.selcustshipmentseu[i].netvk + ($scope.down.selcustshipmentseu[i].netvk * $scope.down.selcustshipmentseu[i].percentage));
+                    }
+                }
+
+                $scope.down.teljesmaut = teljesmaut;
+                //console.log(teljesmaut);
+                $scope.down.teljestreibstoff = teljestreibstoff;
+                //console.log(teljestreibstoff);
+                $scope.down.teljesnetvk = teljesnetvk;
+                //console.log(teljesnetvk);
+                $scope.down.teljesmwst = teljesmwst;
+                //console.log(teljesmwst);
+                $scope.down.teljesbrutto = teljesbrutto;
+                //console.log(teljesbrutto);
+
+                //LECSERÉLI A PONTOKAT VESSZŐKRE
+                for (let i = 0; i < hossz; i++) {
+                    $scope.down.selcustshipmentseu[i].treibstoffzuschlag = $scope.down.selcustshipmentseu[i].treibstoffzuschlag.toString();
+                    $scope.down.selcustshipmentseu[i].treibstoffzuschlag = $scope.down.selcustshipmentseu[i].treibstoffzuschlag.replace(".", ",");
+                    $scope.down.selcustshipmentseu[i].mautzuschlag = $scope.down.selcustshipmentseu[i].mautzuschlag.toString();
+                    $scope.down.selcustshipmentseu[i].mautzuschlag = $scope.down.selcustshipmentseu[i].mautzuschlag.replace(".", ",");
+                }
         //NOEU
         //$scope.down.selcustshipmentsnoneu = response[1];
         $scope.down.totalek = 0;
@@ -1586,6 +1631,205 @@ angular.module('billingErp.controllers', ['smart-table','billingErp.services']).
 
     $scope.manually.mandata.getManuallyFormData();
   }).
+
+controller('profitCtrl', function (Excel, $scope, $http) {
+
+    //DEKLARÁLÁSOK
+    $scope.profit = {};
+    var x = new Date();
+    $scope.profit.fromDate = x;
+    $scope.profit.disableexcel = true;
+    var y = new Date();
+    $scope.profit.toDate = y;
+
+    //GET DATA GOMB MEGNYOMÁSA
+    $scope.profit.profitszamitas = function profitszamitas() {
+        //SZÁZALÉK MEZŐ ELLENÖRZÉSE ÉS ÁTALAKÍTÁSA
+        let szazalek = $scope.profit.szazalek;
+        let szazalekrelacio = '';
+        if (szazalek == undefined) {
+            szazalek = 99999999999999999999999999999999999999;
+            szazalekrelacio = '<';
+        } else {
+            if ((szazalek.slice(1, 2) == '>') || (szazalek.slice(1, 2) == '<') || (szazalek.slice(1, 2) == '=')) {
+                szazalekrelacio = szazalek.slice(0, 2);
+                szazalek = parseFloat($scope.profit.szazalek.slice(2)) / 100;
+            } else if ((szazalek.slice(0, 1) == '>') || (szazalek.slice(0, 1) == '<') || (szazalek.slice(0, 1) == '=')) {
+                szazalekrelacio = szazalek.slice(0, 1);
+                szazalek = parseFloat($scope.profit.szazalek.slice(1)) / 100;
+            } else {
+                szazalek = parseFloat($scope.profit.szazalek) / 100;
+                szazalekrelacio = '<';
+            }
+        }
+        if (szazalekrelacio == '=<') {
+            szazalekrelacio = '<=';
+        }
+        if (szazalekrelacio == '=>') {
+            szazalekrelacio = '>=';
+        }
+        //console.log(szazalek);
+        //console.log(szazalekrelacio);
+
+        //NETAMOUNT MEZŐ ELLENÖRZÉSE ÉS ÁTALAKÍTÁSA
+        let netamount = $scope.profit.netamount;
+        let netamountrelacio = '';
+        if (netamount == undefined) {
+            netamount = 0;
+            netamountrelacio = '>';
+        } else {
+            if ((netamount.slice(1, 2) == '>') || (netamount.slice(1, 2) == '<') || (netamount.slice(1, 2) == '=')) {
+                netamountrelacio = netamount.slice(0, 2);
+                netamount = parseFloat($scope.profit.netamount.slice(2));
+            } else if ((netamount.slice(0, 1) == '>') || (netamount.slice(0, 1) == '<') || (netamount.slice(0, 1) == '=')) {
+                netamountrelacio = netamount.slice(0, 1);
+                netamount = parseFloat($scope.profit.netamount.slice(1));
+            } else {
+                netamount = parseFloat($scope.profit.netamount);
+                netamountrelacio = '>';
+            }
+        }
+        if (netamountrelacio == '=<') {
+            netamountrelacio = '<=';
+        }
+        if (netamountrelacio == '=>') {
+            netamountrelacio = '>=';
+        }
+        //console.log(netamount);
+        //console.log(netamountrelacio);
+
+        //DÁTUMOK KINYERÉSE ÉS ÁTALAKÍTÁSA
+        let fromyear = $scope.profit.fromDate.getFullYear();
+        let frommonth = $scope.profit.fromDate.getMonth() + 1;
+        if (frommonth < 10) {
+            frommonth = '0' + frommonth;
+        }
+        let fromdatum = fromyear + '-' + frommonth + '-01';
+        //console.log(fromdatum);
+
+        let toyear = $scope.profit.toDate.getFullYear();
+        let tomonth = $scope.profit.toDate.getMonth() + 1;
+        if (tomonth < 10) {
+            tomonth = '0' + tomonth;
+        }
+        let todatum = toyear + '-' + tomonth + '-02';
+        //console.log(todatum);
+
+        //HA A CHECKBOX PIPA AKKOR ?
+        if ($scope.profit.profitcheck == true) {
+            // KI VAN PIPÁLVA EZÉRT NEM ÍRJA KI A NEGATÍV PROFITOT
+            $http.post('/api/positivprofit', {
+                szazalek,
+                netamount,
+                fromdatum,
+                todatum,
+                szazalekrelacio,
+                netamountrelacio
+            }).
+            success(function (data) {
+                $scope.profit.adatok = data.result;
+                if ($scope.profit.adatok.length == 0) {
+                    alert('NO DATA!!');
+                    $scope.profit.disableexcel = true;
+                } else {
+                    $scope.profit.disableexcel = false;
+                }
+                console.log($scope.profit.adatok.length);
+
+                //PRICEVOK ÉS PRICEHT TÁBLA ÖSSZEVONÁSA
+                let hossz = $scope.profit.adatok.length;
+                for (let i = 0; i < hossz; i++) {
+                    if ($scope.profit.adatok[i].pricevk == 0) {
+                        $scope.profit.adatok[i].pricevk = $scope.profit.adatok[i].priceht;
+                    }
+                }
+                $scope.szetvalogatas = [].concat($scope.profit.adatok);
+            })
+            return;
+        } else {
+            // NINCS PIPA EZÉRT KIÍRJA A NEGATÍV PROFITOT IS
+            $http.post('/api/postprofit', {
+                szazalek,
+                netamount,
+                fromdatum,
+                todatum,
+                szazalekrelacio,
+                netamountrelacio
+
+            }).
+            success(function (data) {
+                $scope.profit.adatok = data.result;
+                if ($scope.profit.adatok.length == 0) {
+                    alert('NO DATA!!');
+                    $scope.profit.disableexcel = true;
+                } else {
+                    $scope.profit.disableexcel = false;
+                }
+                console.log($scope.profit.adatok.length);
+
+                //PRICEVOK ÉS PRICEHT TÁBLA ÖSSZEVONÁSA
+                let hossz = $scope.profit.adatok.length;
+                for (let i = 0; i < hossz; i++) {
+                    if ($scope.profit.adatok[i].pricevk == 0) {
+                        $scope.profit.adatok[i].pricevk = $scope.profit.adatok[i].priceht;
+                    }
+                }
+                $scope.szetvalogatas = [].concat($scope.profit.adatok);
+            })
+            return;
+        }
+    }
+
+    // EXCEL EXPORT
+    $scope.exportToExcel = function () {
+        let fromyear = $scope.profit.fromDate.getFullYear();
+        let frommonth = $scope.profit.fromDate.getMonth() + 1;
+        if (frommonth < 10) {
+            frommonth = '0' + frommonth;
+        };
+        let toyear = $scope.profit.toDate.getFullYear();
+        let tomonth = $scope.profit.toDate.getMonth() + 1;
+        if (tomonth < 10) {
+            tomonth = '0' + tomonth;
+        };
+        var anchorElement = document.createElement('a');
+
+        var blob = b64toBlob(Excel.tableToExcel('#profitdata'), 'data:application/vnd.ms-excel;base64');
+        var bloblUrl = URL.createObjectURL(blob);
+        anchorElement.href = bloblUrl;
+        anchorElement.target = '_self';
+        anchorElement.download = fromyear + '.' + frommonth + '.01 - ' + toyear + '.' + tomonth + '.01 profit.xls';
+        document.body.appendChild(anchorElement);
+        anchorElement.click();
+    }
+
+    function b64toBlob(b64Data, contentType, sliceSize) {
+        contentType = contentType || '';
+        sliceSize = sliceSize || 512;
+
+        var byteCharacters = atob(b64Data);
+        var byteArrays = [];
+
+        for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+            var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+            var byteNumbers = new Array(slice.length);
+            for (var i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            var byteArray = new Uint8Array(byteNumbers);
+
+            byteArrays.push(byteArray);
+        }
+
+        var blob = new Blob(byteArrays, {
+            type: contentType
+        });
+        return blob;
+    };
+
+}).
   controller('StatisticsCtrl', function (Excel,$scope,$http,$timeout, $filter){
     $scope.statistics = {};
     $scope.statistics.title = 'Statistics';

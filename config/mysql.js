@@ -2483,3 +2483,63 @@ exports.setInvoiceClosed = function(invid,callback){
     })
   })
 }
+
+// NEGATÍV PROFIT NÉLKÜL, SZÁZALÉK > ?
+exports.getPositivProfit1 = function (szazalek, netamount, fromdatum, todatum, szazalekrelacio, netamountrelacio, callback) {
+    pool.getConnection(function (err, connection) {
+        var cmd = "select md.main_customer_id, md.trackingnumber, md.numberofpackets, md.weight_billed, md.receiver_country, md.tempservice, md.labeldate, md.netamount, mc.pricevk, mc.priceht, mcust.name, mi.datetarget from ((main_data as md left join main_calculated_price as mc on mc.main_data_id=md.id) left join main_customer as mcust on md.main_customer_id = mcust.id) left join main_invoice as mi on md.main_invoice_id = mi.id where (mc.pricevk " + szazalekrelacio + " ( md.netamount +  (md.netamount * '" + szazalek + "'))  OR mc.priceht " + szazalekrelacio + " (md.netamount + (md.netamount * '" + szazalek + "' ))) and (md.netamount " + netamountrelacio + " '" + netamount + "') and (mi.datetarget between '" + fromdatum + "' and '" + todatum + "') and (md.netamount < mc.priceht or md.netamount < mc.pricevk) order by mcust.name LIMIT 1000;";
+        connection.query(cmd, [szazalek, netamount, fromdatum, todatum, szazalekrelacio, netamountrelacio], function (err, result) {
+            if (err) {
+                callback(err);
+                return;
+            }
+            connection.release();
+            callback(false, result);
+        })
+    })
+}
+
+//NEGATÍV PROFIT NÉLKÜL, SZÁZALÉK < ?
+exports.getPositivProfit2 = function (szazalek, netamount, fromdatum, todatum, szazalekrelacio, netamountrelacio, callback) {
+    pool.getConnection(function (err, connection) {
+        var cmd = "select md.main_customer_id, md.trackingnumber, md.numberofpackets, md.weight_billed, md.receiver_country, md.tempservice, md.labeldate, md.netamount, mc.pricevk, mc.priceht, mcust.name, mi.datetarget from ((main_data as md left join main_calculated_price as mc on mc.main_data_id=md.id) left join main_customer as mcust on md.main_customer_id = mcust.id) left join main_invoice as mi on md.main_invoice_id = mi.id where (mc.pricevk " + szazalekrelacio + " ( md.netamount +  (md.netamount * '" + szazalek + "'))  AND mc.priceht " + szazalekrelacio + " (md.netamount + (md.netamount * '" + szazalek + "' ))) and (md.netamount " + netamountrelacio + " '" + netamount + "') and (mi.datetarget between '" + fromdatum + "' and '" + todatum + "') and (md.netamount < mc.priceht or md.netamount < mc.pricevk) order by mcust.name LIMIT 1000;";
+        connection.query(cmd, [szazalek, netamount, fromdatum, todatum, szazalekrelacio, netamountrelacio], function (err, result) {
+            if (err) {
+                callback(err);
+                return;
+            }
+            connection.release();
+            callback(false, result);
+        })
+    })
+}
+
+//NEGATÍV PROFITTAL, SZÁZALÉK > ?
+exports.getProfit1 = function (szazalek, netamount, fromdatum, todatum, szazalekrelacio, netamountrelacio, callback) {
+    pool.getConnection(function (err, connection) {
+        var cmd = "select md.main_customer_id, md.trackingnumber, md.numberofpackets, md.weight_billed, md.receiver_country, md.tempservice, md.labeldate, md.netamount, mc.pricevk, mc.priceht, mcust.name, mi.datetarget from ((main_data as md left join main_calculated_price as mc on mc.main_data_id=md.id) left join main_customer as mcust on md.main_customer_id = mcust.id) left join main_invoice as mi on md.main_invoice_id = mi.id where (mc.pricevk " + szazalekrelacio + " ( md.netamount +  (md.netamount * '" + szazalek + "'))  OR mc.priceht " + szazalekrelacio + " (md.netamount + (md.netamount * '" + szazalek + "' ))) and (md.netamount " + netamountrelacio + " '" + netamount + "') and (mi.datetarget between '" + fromdatum + "' and '" + todatum + "') order by mcust.name LIMIT 1000;";
+        connection.query(cmd, [szazalek, netamount, fromdatum, todatum, szazalekrelacio, netamountrelacio], function (err, result) {
+            if (err) {
+                callback(err);
+                return;
+            }
+            connection.release();
+            callback(false, result);
+        })
+    })
+}
+
+//NEGATÍV PROFITTAL, SZÁZALÉK < ?
+exports.getProfit2 = function (szazalek, netamount, fromdatum, todatum, szazalekrelacio, netamountrelacio, callback) {
+    pool.getConnection(function (err, connection) {
+        var cmd = "select md.main_customer_id, md.trackingnumber, md.numberofpackets, md.weight_billed, md.receiver_country, md.tempservice, md.labeldate, md.netamount, mc.pricevk, mc.priceht, mcust.name, mi.datetarget from ((main_data as md left join main_calculated_price as mc on mc.main_data_id=md.id) left join main_customer as mcust on md.main_customer_id = mcust.id) left join main_invoice as mi on md.main_invoice_id = mi.id where (mc.pricevk " + szazalekrelacio + " ( md.netamount +  (md.netamount * '" + szazalek + "'))  AND mc.priceht " + szazalekrelacio + " (md.netamount + (md.netamount * '" + szazalek + "' ))) and (md.netamount " + netamountrelacio + " '" + netamount + "') and (mi.datetarget between '" + fromdatum + "' and '" + todatum + "') order by mcust.name LIMIT 1000;";
+        connection.query(cmd, [szazalek, netamount, fromdatum, todatum, szazalekrelacio, netamountrelacio], function (err, result) {
+            if (err) {
+                callback(err);
+                return;
+            }
+            connection.release();
+            callback(false, result);
+        })
+    })
+}

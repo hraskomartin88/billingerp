@@ -26,10 +26,10 @@ h1 {{down.title}}
     .row.top-buffer
       .col-lg-2
         ul.list-group
-          li.list-group-item Total VK: {{down.totalvk | currency:'€':2}}
-          li.list-group-item Total HT: {{down.totalht | currency:'€':2}}
-          li.list-group-item Total EK: {{down.totalek | currency:'€':2}}
-          li.list-group-item Profit: {{(down.totalvk+down.totalht)-down.totalek | currency:'€':2}}
+          li.list-group-item Total VK: {{down.osszvk | currency:'€':2}}
+          li.list-group-item Total HT: {{down.osszht | currency:'€':2}}
+          li.list-group-item Total EK: {{down.osszek | currency:'€':2}}
+          li.list-group-item Profit: {{(down.osszvk+down.osszht)-down.osszek | currency:'€':2}}
     .row.top-buffer
       .col-lg-2
         a(href='#', ng-click='exportToExcel()', role='button', ng-disabled='down.disableexcel').btn.btn-default.btn-md
@@ -64,6 +64,10 @@ h1 {{down.title}}
                 th(ng-style="{'background-color':'red'}").hide NUR FÜR INTERNEN GEBRAUCH
                 th(ng-style="{'background-color':'red'}").hide
                 th(ng-style="{'background-color':'red'}").hide NUR FÜR INTERNEN GEBRAUCH
+                th(ng-style="{'background-color':'red'}").hide
+                th(ng-style="{'background-color':'red'}").hide NUR FÜR INTERNEN GEBRAUCH
+                th(ng-style="{'background-color':'red'}").hide
+                th(ng-style="{'background-color':'red'}").hide NUR FÜR INTERNEN GEBRAUCH
             thead
               tr
                 th Datum
@@ -76,6 +80,8 @@ h1 {{down.title}}
                 th Gewicht
                 th Gewicht (eingegebenes)
                 th Netto
+                th Treibstoff zuschlag
+                th Maut zuschlag AT / AT-DE
                 th MWST
                 th Brutto
                 th VK
@@ -99,6 +105,8 @@ h1 {{down.title}}
                 td(ng-if="shipmentrow.netvk!='0'") {{shipmentrow.netvk | number:2}}
                   //div(click-to-edit="shipmentrow.netvk")
                 td(ng-if="shipmentrow.netvk==''") {{shipmentrow.netht | number:2}}
+                td {{shipmentrow.treibstoffzuschlag}}
+                td {{shipmentrow.mautzuschlag}}
                   //div(click-to-edit="shipmentrow.netht")
                 td(ng-if="shipmentrow.netvk!='0'") {{shipmentrow.netvk*shipmentrow.percentage | number:2}}
                 td(ng-if="shipmentrow.netvk==''") {{shipmentrow.netht*shipmentrow.percentage | number:2}}
@@ -121,11 +129,15 @@ h1 {{down.title}}
                 td
                   strong SUM
                 td
-                  strong {{down.totalneteu | number:2}}
+                  strong {{down.teljesnetvk | number:2}}
                 td
-                  strong {{down.totalmwsteu | number:2}}
+                  strong {{down.teljestreibstoff | number:2}}
                 td
-                  strong {{down.totalneteu+down.totalmwsteu | number:2}}
+                  strong {{down.teljesmaut | number:2}}
+                td
+                  strong {{down.teljesmwst | number:2}}
+                td
+                  strong {{down.teljesbrutto | number:2}}
                 td
                 td
                 td
@@ -153,6 +165,8 @@ h1 {{down.title}}
                 th HT
                 th Ust.
                 th Empfänger
+                th Treibstoff zuschlag
+                th Maut zuschlag AT / AT-DE
             tbody
               tr(ng-repeat='manrow in down.selcustshipmentman', ng-class='{danger:manrow.manually_ek>manrow.manually_vk && manrow.manually_vk!=0}', ng-init='down.totalmannet=down.totalmannet+manrow.manually_vk')
                 td {{manrow.labeldate | date: 'dd.MM.yyyy'}}

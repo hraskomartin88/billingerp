@@ -761,7 +761,85 @@ module.exports = function(app){
         res.send(503);
       }
       if(result){
-        res.send(result);
+          let treibstoffnetvk = 0;
+                let mautnetvk = 0;
+                let hossz = result[0].length;
+                let osszvk = 0;
+                let osszht = 0;
+                let osszek = 0;
+
+
+                for (let i = 0; i < hossz; i++) {
+                    osszvk = osszvk + result[0][i].netvk;
+                    osszht = osszht + result[0][i].netht;
+                    osszek = osszek + result[0][i].netek;
+                }
+
+                //TREIBSTOFF SORT FELRAKJA OSZLOPNAK
+                for (let i = 0; i < hossz; i++) {
+                    if (result[0][i].tempservice == "TREIBSTOFFZUSCHLAG") {
+                        treibstoffnetvk = result[0][i].netvk;
+                        for (let x = 0; x < hossz; x++) {
+                            if (result[0][x].trackingnumber == result[0][i].trackingnumber && result[0][x].numberofpackets != "") {
+                                result[0][x].treibstoffzuschlag = treibstoffnetvk;
+                            }
+                        }
+                    } else {
+                        result[0][i].treibstoffzuschlag = 0;
+                    }
+                }
+
+                //MAUTZUSCHLAG SORT FELRAKJA OSZLOPNAK
+                for (let i = 0; i < hossz; i++) {
+                    if (result[0][i].tempservice == "MAUTZUSCHLAG AT-DE") {
+                        mautnetvk = result[0][i].netvk;
+                        for (let x = 0; x < hossz; x++) {
+                            if (result[0][x].trackingnumber == result[0][i].trackingnumber && result[0][x].numberofpackets != "") {
+                                result[0][x].mautzuschlag = mautnetvk;
+                            }
+                        }
+                    } else if (result[0][i].tempservice == "MAUTZUSCHLAG AT") {
+                        mautnetvk = result[0][i].netvk;
+                        for (let x = 0; x < hossz; x++) {
+                            if (result[0][x].trackingnumber == result[0][i].trackingnumber && result[0][x].numberofpackets != "") {
+                                result[0][x].mautzuschlag = mautnetvk;
+                            }
+                        }
+                    } else {
+                        result[0][i].mautzuschlag = 0;
+                    }
+                }
+
+                //TÖRLI A TREIBSTOFFZUSHLAG ÉS A MAUTZUSHCLAG SOROKAT
+                let removeIndex = 0;
+                while (removeIndex != -1) {
+                    removeIndex = result[0].map(function (item) {
+                        return item.tempservice;
+                    }).indexOf("TREIBSTOFFZUSCHLAG");
+                    result[0].splice(removeIndex, 1);
+                }
+
+                let removeIndex1 = 0;
+                while (removeIndex1 != -1) {
+                    removeIndex1 = result[0].map(function (item) {
+                        return item.tempservice;
+                    }).indexOf("MAUTZUSCHLAG AT-DE");
+                    result[0].splice(removeIndex1, 1);
+                }
+
+                let removeIndex2 = 0;
+                while (removeIndex2 != -1) {
+                    removeIndex2 = result[0].map(function (item) {
+                        return item.tempservice;
+                    }).indexOf("MAUTZUSCHLAG AT");
+                    result[0].splice(removeIndex2, 1);
+                }
+
+                //A TÁBLÁHOZ CSATOLOM A HÁROM SORT AMI A HERINTERLADEN OLDALON MEGJELENIK
+                result[0].push(osszvk);
+                result[0].push(osszht);
+                result[0].push(osszek);
+                res.send(result);
         /*db.getEuCountries(function(err,result2){
           if(err) console.log(err);
           var countryarr = Object.keys(result2).map(function(_) { return result2[_].alpha2; });
@@ -1928,6 +2006,76 @@ module.exports = function(app){
     flow.write(req.query.flowIdentifier, stream, {onDone: flow.clean});
     res.send(200);*/
   });
+
+    // NEGATÍV PROFIT NÉLKÜL
+    app.post('/api/positivprofit', function (req, res) {
+        /*console.log(req.body.szazalek);
+        console.log(req.body.netamount);
+        console.log(req.body.fromdatum);
+        console.log(req.body.todatum);
+        console.log(req.body.szazalekrelacio);
+        console.log(req.body.netamountrelacio);*/
+        if (req.body.szazalekrelacio == '>' || req.body.szazalekrelacio == '>=') {
+            db.getPositivProfit1(req.body.szazalek, req.body.netamount, req.body.fromdatum, req.body.todatum, req.body.szazalekrelacio, req.body.netamountrelacio, function (err, result) {
+                if (err) {
+                    console.log(err);
+                }
+                if (result) {
+                    //console.log(result);
+                    res.json({
+                        result: result
+                    });
+                }
+            })
+        } else {
+            db.getPositivProfit2(req.body.szazalek, req.body.netamount, req.body.fromdatum, req.body.todatum, req.body.szazalekrelacio, req.body.netamountrelacio, function (err, result) {
+                if (err) {
+                    console.log(err);
+                }
+                if (result) {
+                    //console.log(result);
+                    res.json({
+                        result: result
+                    });
+                }
+            })
+        }
+    });
+
+    //NEGATÍV PROFITTAL EGYÜTT
+    app.post('/api/postprofit', function (req, res) {
+        /*console.log(req.body.szazalek);
+        console.log(req.body.netamount);
+        console.log(req.body.fromdatum);
+        console.log(req.body.todatum);
+        console.log(req.body.szazalekrelacio);
+        console.log(req.body.netamountrelacio);*/
+        if (req.body.szazalekrelacio == '>' || req.body.szazalekrelacio == '>=') {
+            db.getProfit1(req.body.szazalek, req.body.netamount, req.body.fromdatum, req.body.todatum, req.body.szazalekrelacio, req.body.netamountrelacio, function (err, result) {
+                if (err) {
+                    console.log(err);
+                }
+                if (result) {
+                    //console.log(result);
+                    res.json({
+                        result: result
+                    });
+                }
+            })
+        } else {
+            db.getProfit2(req.body.szazalek, req.body.netamount, req.body.fromdatum, req.body.todatum, req.body.szazalekrelacio, req.body.netamountrelacio, function (err, result) {
+                if (err) {
+                    console.log(err);
+                }
+                if (result) {
+                    //console.log(result);
+                    res.json({
+                        result: result
+                    });
+                }
+            })
+        }
+    });
 
   app.post('/api/unsetselected', function(req,res){
     db.setUnsetSelected(req.body.data, function(err,result){
