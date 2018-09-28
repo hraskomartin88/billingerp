@@ -94,6 +94,10 @@ config(function ($routeProvider, $locationProvider, cfpLoadingBarProvider) {
         templateUrl: 'partials/profit',
         controller: 'profitCtrl'
     }).
+    when('/manuallycc/', {
+        templateUrl: 'partials/manuallycc',
+        controller: 'manuallycc'
+    }).
     otherwise({
         redirectTo: '/'
     });
