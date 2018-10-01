@@ -1637,6 +1637,7 @@ angular.module('billingErp.controllers', ['smart-table','billingErp.services']).
 
 controller('manuallyccCtrl', function ($scope,$http){
 
+
   }).
 
 controller('profitCtrl', function (Excel, $scope, $http) {
