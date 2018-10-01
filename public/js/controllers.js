@@ -1635,6 +1635,10 @@ angular.module('billingErp.controllers', ['smart-table','billingErp.services']).
     $scope.manually.mandata.getManuallyFormData();
   }).
 
+controller('manuallyccCtrl', function ($scope,$http){
+
+  }).
+
 controller('profitCtrl', function (Excel, $scope, $http) {
 
     //DEKLARÁLÁSOK

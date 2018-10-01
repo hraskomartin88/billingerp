@@ -1,1 +1,9 @@
 h1 Manuell Hinzufügen CC
+
+.row.top-buffer
+  .row
+    .col-lg-8
+      .col-lg-4
+        label Spediteur
+        select(ng-model='manually.mandata.forwarders.selectedOption', ng-options='option1.name for option1 in manually.mandata.forwarders.availableOptions track by option1.id').form-control
+          option(style='display:none', value='') Wählen...
