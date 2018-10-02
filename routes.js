@@ -2007,6 +2007,47 @@ module.exports = function(app){
     res.send(200);*/
   });
 
+    app.get('/api/getmanuallyccformdata', function(req,res){
+    var finalresult = {};
+
+    async.parallel([
+        function(callback){
+          db.getManuallyccCountryList(function(err,result){
+            if (err) return callback(err);
+            finalresult.country = result;
+            callback();
+          });
+        },
+        function(callback){
+          db.getManuallyccCustomerList(function(err,result2){
+            if (err) return callback(err);
+            finalresult.customers = result2;
+            callback();
+          });
+        },
+        function(callback){
+          db.getManuallyccForwarder(function(err,result3){
+            if (err) return callback(err);
+            finalresult.forwarders = result3;
+            callback();
+          });
+        },
+        function(callback){
+          db.getManuallyccServices(function(err,result4){
+            if (err) return callback(err);
+            finalresult.services = result4;
+            callback();
+          });
+        },
+    ],function(err){
+      if(err)
+        console.log(err);
+      //console.log('DONE');
+      res.json(finalresult);
+    });
+  });
+
+
     // NEGATÍV PROFIT NÉLKÜL
     app.post('/api/positivprofit', function (req, res) {
         /*console.log(req.body.szazalek);
@@ -2041,6 +2082,7 @@ module.exports = function(app){
             })
         }
     });
+
 
     //NEGATÍV PROFITTAL EGYÜTT
     app.post('/api/postprofit', function (req, res) {

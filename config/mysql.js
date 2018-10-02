@@ -2484,6 +2484,79 @@ exports.setInvoiceClosed = function(invid,callback){
   })
 }
 
+exports.getManuallyccCountryList = function(callback){
+  var cmd = "SELECT alpha2 as id, german_formal as name FROM main_country;";
+  pool.getConnection(function(err,connection){
+    if(err){
+      console.log(err);
+      return;
+    }
+    connection.query(cmd, function(err,result){
+      if(err){
+        console.log(err);
+        return;
+      }
+      connection.release();
+      callback(null,result);
+    });
+  });
+};
+
+exports.getManuallyccCustomerList = function(callback){
+  var cmd = "SELECT id,name FROM main_customer;";
+  pool.getConnection(function(err,connection){
+    if(err){
+      console.log(err);
+      return;
+    }
+    connection.query(cmd, function(err,result){
+      if(err){
+        console.log(err);
+        return;
+      }
+      connection.release();
+      callback(null,result);
+    });
+  });
+};
+
+exports.getManuallyccForwarder = function(callback){
+  var cmd = "SELECT id, name FROM manually_forwarder;";
+  pool.getConnection(function(err,connection){
+    if(err){
+      console.log(err);
+      return;
+    }
+    connection.query(cmd, function(err,result){
+      if(err){
+        console.log(err);
+        return;
+      }
+      connection.release();
+      callback(null, result);
+    });
+  });
+};
+
+exports.getManuallyccServices = function(callback){
+  var cmd = "SELECT id, name FROM manually_service;";
+  pool.getConnection(function(err,connection){
+    if(err){
+      console.log(err);
+      return;
+    }
+
+    connection.query(cmd, function(err,result){
+      if(err){
+        console.log(err);
+        return;
+      }
+      connection.release();
+      callback(null,result);
+    });
+  });
+};
+
 // NEGATÍV PROFIT NÉLKÜL, SZÁZALÉK > ?
 exports.getPositivProfit1 = function (szazalek, netamount, fromdatum, todatum, szazalekrelacio, netamountrelacio, callback) {
     pool.getConnection(function (err, connection) {

@@ -1635,10 +1635,124 @@ angular.module('billingErp.controllers', ['smart-table','billingErp.services']).
     $scope.manually.mandata.getManuallyFormData();
   }).
 
-controller('manuallyccCtrl', function ($scope,$http){
+controller('manuallyccCtrl', function ($scope, $http) {
+    $scope.manuallycc = {};
+    $scope.manuallycc.mandata = {};
 
+    function adatreset() {
+        $scope.manuallycc.mandata.trackingnr = '';
+        $scope.manuallycc.mandata.pieces = '';
+        $scope.manuallycc.mandata.reference = '';
+        $scope.manuallycc.mandata.weight = '';
+        0
+        $scope.manuallycc.mandata.ekprice = '';
+        $scope.manuallycc.mandata.vkprice = '';
 
-  }).
+        $scope.manuallycc.mandata.from.companyname = '';
+        $scope.manuallycc.mandata.from.contactname = '';
+        $scope.manuallycc.mandata.from.postalcode = '';
+
+        $scope.manuallycc.mandata.to.companyname = '';
+        $scope.manuallycc.mandata.to.contactname = '';
+        $scope.manuallycc.mandata.to.postalcode = '';
+
+        $scope.manuallycc.mandata.getManuallyccFormData();
+    }
+
+    var x = new Date();
+    $scope.manuallycc.mandata.dateof = x;
+    var y = new Date();
+    $scope.manuallycc.mandata.dateofinv = y;
+
+    $scope.manuallycc.mandata.getManuallyccFormData = function getManuallyccFormData() {
+        $http({
+            method: 'GET',
+            url: '/api/getmanuallyccformdata'
+        }).
+        success(function (data) {
+            $scope.manuallycc.mandata.forwarders = {
+                availableOptions: data.forwarders,
+                selectedOption: {
+                    id: '1',
+                    name: 'Bil Trans'
+                }
+            };
+
+            $scope.manuallycc.mandata.services = {
+                availableOptions: data.services,
+                selectedOption: {
+                    id: '1',
+                    name: 'FREIGHT'
+                }
+            };
+
+            $scope.manuallycc.mandata.customers = {
+                availableOptions: data.customers,
+                selectedOption: {
+                    id: '1',
+                    name: 'ACP IT Solutions GmbH'
+                }
+            };
+
+            $scope.manuallycc.mandata.servicetype = {
+                    availableOptions: [{
+                        id: '0',
+                        name: 'Standard'
+            }, {
+                        id: '1',
+                        name: 'Express'
+            }],
+                    selectedOption: {
+                        id: '0',
+                        name: 'Standard'
+                    }
+                },
+
+                $scope.manuallycc.mandata.country = {
+                    availableOptions: data.country,
+                    selectedOption: {
+                        id: 'DE',
+                        name: 'Deutschland'
+                    },
+                    selectedOption2: {
+                        id: 'AT',
+                        name: 'Österreich'
+                    }
+                }
+        });
+    };
+    $scope.manuallycc.mandata.getManuallyccFormData();
+
+    $scope.manuallycc.kiir = function kiir() {
+        console.log("spediteur: ", $scope.manuallycc.mandata.forwarders.selectedOption.id);
+        console.log("service: ", $scope.manuallycc.mandata.services.selectedOption.id);
+        console.log("kunde: ", $scope.manuallycc.mandata.customers.selectedOption.id);
+        console.log("ek: ", $scope.manuallycc.mandata.ekprice);
+        console.log("vk: ", $scope.manuallycc.mandata.vkprice);
+        console.log("gewich: ", $scope.manuallycc.mandata.weight);
+        console.log("stück: ", $scope.manuallycc.mandata.pieces);
+        console.log("servicetype: ", $scope.manuallycc.mandata.servicetype.selectedOption.id);
+        console.log("trackingnumber: ", $scope.manuallycc.mandata.trackingnr);
+        console.log("referenze: ", $scope.manuallycc.mandata.reference);
+
+        console.log("von name: ", $scope.manuallycc.mandata.from.companyname);
+        console.log("von kontaktname: ", $scope.manuallycc.mandata.from.contactname);
+        console.log("von land: ", $scope.manuallycc.mandata.country.selectedOption.id);
+        console.log("von postlezahl: ", $scope.manuallycc.mandata.from.postalcode);
+
+        console.log("nach name: ", $scope.manuallycc.mandata.to.companyname);
+        console.log("nach kontaktname: ", $scope.manuallycc.mandata.to.contactname);
+        console.log("nach land: ", $scope.manuallycc.mandata.country.selectedOption2.id);
+        console.log("nach postlezahl: ", $scope.manuallycc.mandata.to.postalcode);
+        console.log($scope.manuallycc.mandata.dateof.toMysqlFormat2());
+        console.log($scope.manuallycc.mandata.dateofinv.toMysqlFormat2());
+
+        adatreset();
+        ;
+
+    }
+
+}).
 
 controller('profitCtrl', function (Excel, $scope, $http) {
 

@@ -3,7 +3,115 @@ h1 Manuell Hinzufügen CC
 .row.top-buffer
   .row
     .col-lg-8
+      .col-lg-6
+        label Versanddatum
+        datepicker(ng-model='manuallycc.mandata.dateof',min-mode='day',datepicker-mode="'day'")
+      .col-lg-6
+        label Monat zur Rechnung
+        datepicker(ng-model='manuallycc.mandata.dateofinv', min-mode='month',datepicker-mode="'month'")
+
+.row.top-buffer
+
+
+.row.top-buffer
+
+
+.row.top-buffer
+  .row
+    .col-lg-8
       .col-lg-4
         label Spediteur
-        select(ng-model='manually.mandata.forwarders.selectedOption', ng-options='option1.name for option1 in manually.mandata.forwarders.availableOptions track by option1.id').form-control
+        select(ng-model='manuallycc.mandata.forwarders.selectedOption', ng-options='option1.name for option1 in manuallycc.mandata.forwarders.availableOptions track by option1.id').form-control
           option(style='display:none', value='') Wählen...
+      .col-lg-4
+        label Service
+        select(ng-model='manuallycc.mandata.services.selectedOption', ng-options='option2.name for option2 in manuallycc.mandata.services.availableOptions track by option2.id').form-control
+          option(style='display:none', value='') Wählen...
+      .col-lg-4
+        label Kunde
+        select(ng-model='manuallycc.mandata.customers.selectedOption', ng-options='option3.name for option3 in manuallycc.mandata.customers.availableOptions track by option3.id').form-control
+          option(style='display:none', value='') Wählen..
+  .row.top-buffer
+    .col-lg-12
+      .col-lg-2
+        label CC EK
+        div.input-group
+          input(type='text', ng-model='manuallycc.mandata.ekprice',decprice).form-control
+          span.input-group-addon
+            span EUR
+      .col-lg-2
+        label CC VK
+        div.input-group
+          input(type='text', ng-model='manuallycc.mandata.vkprice',decprice).form-control
+          span.input-group-addon
+            span EUR
+  .row.top-buffer
+    .col-lg-8
+      .col-lg-3
+        label Gewicht
+        div.input-group
+          input(type='text', ng-model='manuallycc.mandata.weight',decprice).form-control
+          span.input-group-addon
+            span KG
+      .col-lg-3
+        label Stück
+        input(type='number', ng-model='manuallycc.mandata.pieces').form-control
+      .col-lg-3
+        label Service
+        select(ng-model='manuallycc.mandata.servicetype.selectedOption', ng-options='option88.name for option88 in manuallycc.mandata.servicetype.availableOptions track by option88.id').form-control
+          option(style='display:none', value='') Wählen..
+  .row.top-buffer
+    .col-lg-8
+      .col-lg-3
+        label Trackingnummer
+        input(type='text', ng-model='manuallycc.mandata.trackingnr').form-control
+      .col-lg-3
+        label Referenz
+        input(type='text', ng-model='manuallycc.mandata.reference').form-control
+  hr
+
+.row.top-buffer
+  h4 Von
+  .row
+    .col-lg-8
+      .col-lg-3
+        label Name der Firma
+        input(type='text', ng-model='manuallycc.mandata.from.companyname').form-control
+      .col-lg-3
+        label Kontaktname
+        input(type='text', ng-model='manuallycc.mandata.from.contactname').form-control
+  .row.top-buffer
+    .col-lg-8
+      .col-lg-3
+        label Land
+        //select(ng-model='manuallycc.mandata.from.country').form-control
+        select(ng-model='manuallycc.mandata.country.selectedOption', ng-options='option4.name for option4 in manuallycc.mandata.country.availableOptions track by option4.id').form-control
+          option(style='display:none', value='') Wählen..
+      .col-lg-3
+        label Postleitzahl
+        input(type='text', ng-model='manuallycc.mandata.from.postalcode').form-control
+  hr
+
+.row.top-buffer
+  h4 Nach
+  .row
+    .col-lg-8
+      .col-lg-3
+        label Name der Firma
+        input(type='text', ng-model='manuallycc.mandata.to.companyname').form-control
+      .col-lg-3
+        label Kontaktname
+        input(type='text', ng-model='manuallycc.mandata.to.contactname').form-control
+  .row.top-buffer
+    .col-lg-8
+      .col-lg-3
+        label Land
+        select(ng-model='manuallycc.mandata.country.selectedOption2', ng-options='option5.name for option5 in manuallycc.mandata.country.availableOptions track by option5.id').form-control
+          option(style='display:none', value='') Wählen..
+      .col-lg-3
+        label Postleitzahl
+        input(type='text', ng-model='manuallycc.mandata.to.postalcode').form-control
+  hr
+
+.row.top-buffer
+  button(type='button', ng-click='manuallycc.kiir()').btn.btn-default Kiír
